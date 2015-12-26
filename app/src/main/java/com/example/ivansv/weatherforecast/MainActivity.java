@@ -7,7 +7,7 @@ import android.view.View;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements ListFragment.OnListFragmentInteractionListener{
+public class MainActivity extends AppCompatActivity implements ListFragment.OnListFragmentInteractionListener {
     public static ArrayList<ForecastItem> items;
     private StartFragment startFragment = new StartFragment();
     private ListFragment listFragment = new ListFragment();
@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity implements ListFragment.OnLi
 
     public void update(View view) {
         items = new ArrayList<>();
-        new LoaderTask(items).execute();
+        new LoaderTask(this, items).execute();
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {

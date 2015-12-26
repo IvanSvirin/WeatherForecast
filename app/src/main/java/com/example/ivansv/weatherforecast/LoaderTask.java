@@ -1,7 +1,9 @@
 package com.example.ivansv.weatherforecast;
 
+import android.app.Activity;
 import android.os.AsyncTask;
 import android.util.Xml;
+import android.widget.Toast;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -17,12 +19,15 @@ import java.util.ArrayList;
  * Created by ivansv on 24.12.2015.
  */
 public class LoaderTask extends AsyncTask<Void, Void, Void> {
+    Activity activity;
     ArrayList<ForecastItem> forecastItems;
     static InputStream is = null;
     static URL url = null;
     static HttpURLConnection urlConnection;
+    boolean connection = true;
 
-    public LoaderTask(ArrayList<ForecastItem> forecastItems) {
+    public LoaderTask(Activity activity, ArrayList<ForecastItem> forecastItems) {
+        this.activity = activity;
         this.forecastItems = forecastItems;
     }
 
@@ -45,6 +50,7 @@ public class LoaderTask extends AsyncTask<Void, Void, Void> {
             urlConnection.disconnect();
         } catch (IOException e) {
             e.printStackTrace();
+            connection = false;
         } catch (XmlPullParserException e) {
             e.printStackTrace();
         }
@@ -141,4 +147,11 @@ public class LoaderTask extends AsyncTask<Void, Void, Void> {
         return s;
     }
 
+    @Override
+    protected void onPostExecute(Void aVoid) {
+        super.onPostExecute(aVoid);
+        if (!connection) {
+            Toast.makeText(activity, "Нет соединения! Проверьте подключение к интеренту!", Toast.LENGTH_SHORT).show();
+        }
+    }
 }

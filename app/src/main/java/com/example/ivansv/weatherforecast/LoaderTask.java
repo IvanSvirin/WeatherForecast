@@ -20,14 +20,16 @@ import java.util.ArrayList;
  */
 public class LoaderTask extends AsyncTask<Void, Void, Void> {
     Activity activity;
+    AsyncTaskListener asyncTaskListener;
     ArrayList<ForecastItem> forecastItems;
     static InputStream is = null;
     static URL url = null;
     static HttpURLConnection urlConnection;
     boolean connection = true;
 
-    public LoaderTask(Activity activity, ArrayList<ForecastItem> forecastItems) {
+    public LoaderTask(Activity activity, AsyncTaskListener asyncTaskListener, ArrayList<ForecastItem> forecastItems) {
         this.activity = activity;
+        this.asyncTaskListener = asyncTaskListener;
         this.forecastItems = forecastItems;
     }
 
@@ -152,6 +154,8 @@ public class LoaderTask extends AsyncTask<Void, Void, Void> {
         super.onPostExecute(aVoid);
         if (!connection) {
             Toast.makeText(activity, "Нет соединения! Проверьте подключение к интеренту!", Toast.LENGTH_SHORT).show();
+        } else {
+            asyncTaskListener.onAsyncTaskFinished();
         }
     }
 }

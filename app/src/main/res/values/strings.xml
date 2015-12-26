@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">WeatherForecast</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="no_data">НЕТ ДАННЫХ</string>
+    <string name="update">ОБНОВИТЬ</string>
+    <string name="detailTitle">Прогноз погоды в Новосибирске на</string>
+    <string name="temperature">Температура воздуха</string>
+    <string name="detailRealFeel">Ощущается</string>
+    <string name="detailCloudiness">Облачность</string>
+    <string name="detailPrecipitation">Осадки</string>
+    <string name="detailWind">Ветер</string>
+    <string name="detailPressure">Атмосферное давление</string>
+    <string name="detailWetness">Влажность</string>
+</resources>

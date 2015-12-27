@@ -29,7 +29,7 @@
         android:layout_alignStart="@+id/list"
         android:textSize="20sp"
         android:textColor="#1A237E"
-        android:paddingBottom="30sp" />
+        android:paddingBottom="10sp" />
     <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
     <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
     <!--xmlns:tools="http://schemas.android.com/tools"-->

@@ -4,11 +4,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.ivansv.weatherforecast.ListFragment.OnListFragmentInteractionListener;
 
 import java.util.List;
+
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link ForecastItem} and makes a call to the
@@ -34,10 +36,25 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
+        char degree = 0x00B0;
         holder.mItem = mValues.get(position);
         holder.dateView.setText(mValues.get(position).date);
         holder.dayTimeView.setText(mValues.get(position).dayTime);
-        holder.temperatureView.setText(mValues.get(position).temperature);
+        holder.temperatureView.setText(mValues.get(position).temperature + degree + "C");
+        switch (mValues.get(position).getCloudiness()) {
+            case "ясно":
+                holder.cloudinessView.setImageResource(R.drawable.one);
+                break;
+            case "малооблачно":
+                holder.cloudinessView.setImageResource(R.drawable.two);
+                break;
+            case "облачно":
+                holder.cloudinessView.setImageResource(R.drawable.four);
+                break;
+            case "пасмурно":
+                holder.cloudinessView.setImageResource(R.drawable.six);
+                break;
+        }
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,6 +78,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
         public final TextView dateView;
         public final TextView dayTimeView;
         public final TextView temperatureView;
+        public final ImageView cloudinessView;
         public ForecastItem mItem;
 
         public ViewHolder(View view) {
@@ -69,6 +87,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
             dateView = (TextView) view.findViewById(R.id.date);
             dayTimeView = (TextView) view.findViewById(R.id.dayTime);
             temperatureView = (TextView) view.findViewById(R.id.temperature);
+            cloudinessView = (ImageView) view.findViewById(R.id.cloudiness);
         }
 
         @Override

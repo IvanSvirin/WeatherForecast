@@ -108,20 +108,47 @@ public class LoaderTask extends AsyncTask<Void, Void, Void> {
                             forecast.setPrecipitation(parser.getAttributeValue(1));
                         }
                         if (name.equals("PRESSURE")) {
-                            forecast.setPressure(average(parser.getAttributeValue(0), parser.getAttributeValue(1)));
+                            forecast.setPressure(average(parser.getAttributeValue(0), parser.getAttributeValue(1), false));
                         }
                         if (name.equals("TEMPERATURE")) {
-                            forecast.setTemperature(average(parser.getAttributeValue(0), parser.getAttributeValue(1)));
+                            forecast.setTemperature(average(parser.getAttributeValue(0), parser.getAttributeValue(1), true));
                         }
                         if (name.equals("WIND")) {
-                            forecast.setWindSpeed(average(parser.getAttributeValue(0), parser.getAttributeValue(1)));
-                            forecast.setWindDirection(parser.getAttributeValue(2));
+                            forecast.setWindSpeed(average(parser.getAttributeValue(0), parser.getAttributeValue(1), false));
+                            String windDirection = null;
+                            switch (parser.getAttributeValue(2)) {
+                                case "0":
+                                    windDirection = "северный";
+                                    break;
+                                case "1":
+                                    windDirection = "северо-восточный";
+                                    break;
+                                case "2":
+                                    windDirection = "восточный";
+                                    break;
+                                case "3":
+                                    windDirection = "юго-восточный";
+                                    break;
+                                case "4":
+                                    windDirection = "южный";
+                                    break;
+                                case "5":
+                                    windDirection = "юго-западный";
+                                    break;
+                                case "6":
+                                    windDirection = "западный";
+                                    break;
+                                case "7":
+                                    windDirection = "северо-западный";
+                                    break;
+                            }
+                            forecast.setWindDirection(windDirection);
                         }
                         if (name.equals("RELWET")) {
-                            forecast.setWetness(average(parser.getAttributeValue(0), parser.getAttributeValue(1)));
+                            forecast.setWetness(average(parser.getAttributeValue(0), parser.getAttributeValue(1), false));
                         }
                         if (name.equals("HEAT")) {
-                            forecast.setRealFeel(average(parser.getAttributeValue(0), parser.getAttributeValue(1)));
+                            forecast.setRealFeel(average(parser.getAttributeValue(0), parser.getAttributeValue(1), true));
                         }
                         break;
                     case XmlPullParser.END_TAG:
@@ -140,12 +167,16 @@ public class LoaderTask extends AsyncTask<Void, Void, Void> {
         }
     }
 
-    String average(String s1, String s2) {
+    String average(String s1, String s2, boolean isTemperature) {
         String s = null;
         int intS1 = Integer.parseInt(s1);
         int intS2 = Integer.parseInt(s2);
         int intS = (intS1 + intS2) / 2;
-        s = String.valueOf(intS);
+        if (isTemperature && intS > 0) {
+            s = "+" + String.valueOf(intS);
+        } else {
+            s = String.valueOf(intS);
+        }
         return s;
     }
 

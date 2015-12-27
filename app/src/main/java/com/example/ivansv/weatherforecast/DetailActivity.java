@@ -29,13 +29,22 @@ public class DetailActivity extends AppCompatActivity {
         TextView tvPressureValue = (TextView) findViewById(R.id.detailPressureValue);
         TextView tvWetnessValue = (TextView) findViewById(R.id.detailWetnessValue);
 
-        tvWhen.setText(forecastItem.getDayTime() + " " + forecastItem.getDate());
-        tvTemperatureValue.setText(forecastItem.getTemperature() + degree + "C");
-        tvRealFeelValue.setText(forecastItem.getRealFeel() + degree + "C");
-        tvCloudinessValue.setText(forecastItem.getCloudiness());
-        tvPrecipitationValue.setText(forecastItem.getPrecipitation() + " мм");
-        tvWindValue.setText(forecastItem.getWindDirection() + "   " + forecastItem.getWindSpeed() + " м/с");
-        tvPressureValue.setText(forecastItem.getPressure() + " мм рт. ст.");
-        tvWetnessValue.setText(forecastItem.getWetness() + " %");
+        String when = forecastItem.getDayTime() + " " + forecastItem.getDate();
+        String temperature = forecastItem.getTemperature() + degree + "C";
+        String realFeel = forecastItem.getRealFeel() + degree + "C";
+        String cloudiness = forecastItem.getCloudiness();
+        String precipitation = forecastItem.getPrecipitation() + " мм";
+        String wind = forecastItem.getWindDirection() + "   " + forecastItem.getWindSpeed() + " м/с";
+        String pressure = forecastItem.getPressure() + " мм рт. ст.";
+        String wetness = forecastItem.getWetness() + " %";
+
+        tvWhen.setText(when);
+        tvTemperatureValue.setText(temperature);
+        tvRealFeelValue.setText(realFeel);
+        tvCloudinessValue.setText(cloudiness);
+        tvPrecipitationValue.setText(precipitation);
+        tvWindValue.setText(wind);
+        tvPressureValue.setText(pressure);
+        tvWetnessValue.setText(wetness);
     }
 }

@@ -6,11 +6,12 @@
     <string name="no_data">НЕТ ДАННЫХ</string>
     <string name="update">ОБНОВИТЬ</string>
     <string name="detailTitle">Прогноз погоды в Новосибирске на</string>
+    <string name="listTitle">Прогноз погоды в Новосибирске</string>
     <string name="temperature">Температура воздуха</string>
     <string name="detailRealFeel">Ощущается</string>
     <string name="detailCloudiness">Облачность</string>
     <string name="detailPrecipitation">Осадки</string>
     <string name="detailWind">Ветер</string>
-    <string name="detailPressure">Атмосферное давление</string>
+    <string name="detailPressure">Атм. давление</string>
     <string name="detailWetness">Влажность</string>
 </resources>

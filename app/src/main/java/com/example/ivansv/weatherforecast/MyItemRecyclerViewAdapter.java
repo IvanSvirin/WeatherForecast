@@ -11,12 +11,6 @@ import com.example.ivansv.weatherforecast.ListFragment.OnListFragmentInteraction
 
 import java.util.List;
 
-
-/**
- * {@link RecyclerView.Adapter} that can display a {@link ForecastItem} and makes a call to the
- * specified {@link OnListFragmentInteractionListener}.
- * TODO: Replace the implementation with code for your data type.
- */
 public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder> {
 
     private final List<ForecastItem> mValues;
@@ -40,7 +34,8 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
         holder.mItem = mValues.get(position);
         holder.dateView.setText(mValues.get(position).date);
         holder.dayTimeView.setText(mValues.get(position).dayTime);
-        holder.temperatureView.setText(mValues.get(position).temperature + degree + "C");
+        String temperature = mValues.get(position).temperature + degree + "C";
+        holder.temperatureView.setText(temperature);
         switch (mValues.get(position).getCloudiness()) {
             case "ясно":
                 holder.cloudinessView.setImageResource(R.drawable.one);
@@ -60,8 +55,6 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
             @Override
             public void onClick(View v) {
                 if (null != mListener) {
-                    // Notify the active callbacks interface (the activity, if the
-                    // fragment is attached to one) that an item has been selected.
                     mListener.onListFragmentInteraction(holder.mItem);
                 }
             }

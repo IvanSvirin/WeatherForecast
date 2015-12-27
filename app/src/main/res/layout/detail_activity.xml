@@ -24,7 +24,7 @@
         android:layout_alignParentStart="true"
         android:textColor="#1A237E"
         android:textSize="20sp"
-        android:paddingBottom="20sp"
+        android:paddingBottom="10sp"
         android:paddingLeft="20sp"
         android:paddingRight="20sp" />
 
@@ -36,7 +36,7 @@
         android:layout_below="@+id/detailWhen"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:textSize="20sp"
+        android:textSize="15sp"
         android:textColor="#1A237E"
         android:paddingLeft="10sp"
         android:paddingRight="10sp" />
@@ -50,7 +50,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:textColor="#1A237E"
-        android:textSize="20sp"
+        android:textSize="15sp"
         android:paddingLeft="10sp"
         android:paddingRight="10sp" />
 
@@ -63,7 +63,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:textColor="#1A237E"
-        android:textSize="20sp"
+        android:textSize="15sp"
         android:paddingLeft="10sp"
         android:paddingRight="10sp" />
 
@@ -76,7 +76,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:textColor="#1A237E"
-        android:textSize="20sp"
+        android:textSize="15sp"
         android:paddingRight="10sp"
         android:paddingLeft="10sp" />
 
@@ -88,7 +88,7 @@
         android:layout_below="@+id/detailPrecipitation"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:textSize="20sp"
+        android:textSize="15sp"
         android:textColor="#1A237E"
         android:paddingLeft="10sp"
         android:paddingRight="10sp" />
@@ -102,7 +102,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:textColor="#1A237E"
-        android:textSize="20sp"
+        android:textSize="15sp"
         android:paddingRight="10sp"
         android:paddingLeft="10sp" />
 
@@ -115,7 +115,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:textColor="#1A237E"
-        android:textSize="20sp"
+        android:textSize="15sp"
         android:paddingLeft="10sp"
         android:paddingRight="10sp" />
 
@@ -123,7 +123,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/detailTemperatureValue"
-        android:textSize="20sp"
+        android:textSize="15sp"
         android:textColor="#1A237E"
         android:layout_alignTop="@+id/detailTemperature"
         android:layout_alignParentRight="true"
@@ -136,7 +136,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/detailRealFeelValue"
         android:textColor="#1A237E"
-        android:textSize="20sp"
+        android:textSize="15sp"
         android:layout_alignTop="@+id/detailRealFeel"
         android:layout_alignRight="@+id/detailTemperatureValue"
         android:layout_alignEnd="@+id/detailTemperatureValue"
@@ -148,7 +148,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/detailCloudinessValue"
         android:textColor="#1A237E"
-        android:textSize="20sp"
+        android:textSize="15sp"
         android:layout_alignTop="@+id/detailCloudiness"
         android:layout_alignRight="@+id/detailRealFeelValue"
         android:layout_alignEnd="@+id/detailRealFeelValue"
@@ -160,7 +160,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/detailPrecipitationValue"
         android:textColor="#1A237E"
-        android:textSize="20sp"
+        android:textSize="15sp"
         android:layout_alignTop="@+id/detailPrecipitation"
         android:layout_alignRight="@+id/detailCloudinessValue"
         android:layout_alignEnd="@+id/detailCloudinessValue"
@@ -171,7 +171,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/detailWindValue"
-        android:textSize="20sp"
+        android:textSize="15sp"
         android:textColor="#1A237E"
         android:layout_alignTop="@+id/detailWind"
         android:layout_alignRight="@+id/detailPrecipitationValue"
@@ -184,7 +184,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/detailPressureValue"
         android:textColor="#1A237E"
-        android:textSize="20sp"
+        android:textSize="15sp"
         android:layout_alignTop="@+id/detailPressure"
         android:layout_alignRight="@+id/detailWindValue"
         android:layout_alignEnd="@+id/detailWindValue"
@@ -196,7 +196,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/detailWetnessValue"
         android:textColor="#1A237E"
-        android:textSize="20sp"
+        android:textSize="15sp"
         android:layout_alignTop="@+id/detailWetness"
         android:layout_alignRight="@+id/detailPressureValue"
         android:layout_alignEnd="@+id/detailPressureValue"

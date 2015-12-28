@@ -13,12 +13,12 @@ import java.util.List;
 
 public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder> {
 
-    private final List<ForecastItem> mValues;
-    private final OnListFragmentInteractionListener mListener;
+    private final List<ForecastItem> forecastItems;
+    private final OnListFragmentInteractionListener interactionListener;
 
-    public MyItemRecyclerViewAdapter(List<ForecastItem> items, OnListFragmentInteractionListener listener) {
-        mValues = items;
-        mListener = listener;
+    public MyItemRecyclerViewAdapter(List<ForecastItem> forecastItems, OnListFragmentInteractionListener interactionListener) {
+        this.forecastItems = forecastItems;
+        this.interactionListener = interactionListener;
     }
 
     @Override
@@ -31,31 +31,31 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         char degree = 0x00B0;
-        holder.mItem = mValues.get(position);
-        holder.dateView.setText(mValues.get(position).date);
-        holder.dayTimeView.setText(mValues.get(position).dayTime);
-        String temperature = mValues.get(position).temperature + degree + "C";
-        holder.temperatureView.setText(temperature);
-        switch (mValues.get(position).getCloudiness()) {
+        holder.item = forecastItems.get(position);
+        holder.dateTextView.setText(forecastItems.get(position).getDate());
+        holder.dayTimeTextView.setText(forecastItems.get(position).getDayTime());
+        String temperature = forecastItems.get(position).getTemperature() + degree + "C";
+        holder.temperatureTextView.setText(temperature);
+        switch (forecastItems.get(position).getCloudiness()) {
             case "ясно":
-                holder.cloudinessView.setImageResource(R.drawable.one);
+                holder.cloudinessImageView.setImageResource(R.drawable.one);
                 break;
             case "малооблачно":
-                holder.cloudinessView.setImageResource(R.drawable.two);
+                holder.cloudinessImageView.setImageResource(R.drawable.two);
                 break;
             case "облачно":
-                holder.cloudinessView.setImageResource(R.drawable.four);
+                holder.cloudinessImageView.setImageResource(R.drawable.four);
                 break;
             case "пасмурно":
-                holder.cloudinessView.setImageResource(R.drawable.six);
+                holder.cloudinessImageView.setImageResource(R.drawable.six);
                 break;
         }
 
-        holder.mView.setOnClickListener(new View.OnClickListener() {
+        holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (null != mListener) {
-                    mListener.onListFragmentInteraction(holder.mItem);
+                if (null != interactionListener) {
+                    interactionListener.onListFragmentInteraction(holder.item);
                 }
             }
         });
@@ -63,29 +63,29 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
 
     @Override
     public int getItemCount() {
-        return mValues.size();
+        return forecastItems.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public final View mView;
-        public final TextView dateView;
-        public final TextView dayTimeView;
-        public final TextView temperatureView;
-        public final ImageView cloudinessView;
-        public ForecastItem mItem;
+        public final View view;
+        public final TextView dateTextView;
+        public final TextView dayTimeTextView;
+        public final TextView temperatureTextView;
+        public final ImageView cloudinessImageView;
+        public ForecastItem item;
 
         public ViewHolder(View view) {
             super(view);
-            mView = view;
-            dateView = (TextView) view.findViewById(R.id.date);
-            dayTimeView = (TextView) view.findViewById(R.id.dayTime);
-            temperatureView = (TextView) view.findViewById(R.id.temperature);
-            cloudinessView = (ImageView) view.findViewById(R.id.cloudiness);
+            this.view = view;
+            dateTextView = (TextView) view.findViewById(R.id.date);
+            dayTimeTextView = (TextView) view.findViewById(R.id.dayTime);
+            temperatureTextView = (TextView) view.findViewById(R.id.temperature);
+            cloudinessImageView = (ImageView) view.findViewById(R.id.cloudiness);
         }
 
         @Override
         public String toString() {
-            return super.toString() + " '" + dayTimeView.getText() + "'";
+            return super.toString();
         }
     }
 }

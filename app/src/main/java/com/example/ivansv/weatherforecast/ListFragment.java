@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 public class ListFragment extends Fragment {
-    private OnListFragmentInteractionListener mListener;
+    private OnListFragmentInteractionListener interactionListener;
 
     public ListFragment() {
     }
@@ -25,7 +25,7 @@ public class ListFragment extends Fragment {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_item_list, container, false);
 
         RecyclerView recyclerViewContacts = (RecyclerView) rootView.findViewById(R.id.list);
-        MyItemRecyclerViewAdapter adapter = new MyItemRecyclerViewAdapter(MainActivity.items, mListener);
+        MyItemRecyclerViewAdapter adapter = new MyItemRecyclerViewAdapter(MainActivity.items, interactionListener);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerViewContacts.setAdapter(adapter);
         recyclerViewContacts.setLayoutManager(layoutManager);
@@ -37,7 +37,7 @@ public class ListFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnListFragmentInteractionListener) {
-            mListener = (OnListFragmentInteractionListener) context;
+            interactionListener = (OnListFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString() + " must implement OnListFragmentInteractionListener");
         }
@@ -46,7 +46,7 @@ public class ListFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
+        interactionListener = null;
     }
 
     public interface OnListFragmentInteractionListener {

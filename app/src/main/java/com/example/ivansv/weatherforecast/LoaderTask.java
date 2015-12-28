@@ -19,13 +19,12 @@ import java.util.ArrayList;
  * Created by ivansv on 24.12.2015.
  */
 public class LoaderTask extends AsyncTask<Void, Void, Void> {
-    Activity activity;
-    AsyncTaskListener asyncTaskListener;
-    ArrayList<ForecastItem> forecastItems;
-    static InputStream inputStream = null;
-    static URL url = null;
-    static HttpURLConnection urlConnection;
-    boolean isConnection = true;
+    private Activity activity;
+    private AsyncTaskListener asyncTaskListener;
+    private ArrayList<ForecastItem> forecastItems;
+    private InputStream inputStream;
+    private HttpURLConnection urlConnection;
+    private boolean isConnection = true;
 
     public LoaderTask(Activity activity, AsyncTaskListener asyncTaskListener, ArrayList<ForecastItem> forecastItems) {
         this.activity = activity;
@@ -41,7 +40,7 @@ public class LoaderTask extends AsyncTask<Void, Void, Void> {
 
     private void loadXml(String urlString) {
         try {
-            url = new URL(urlString);
+            URL url = new URL(urlString);
             urlConnection = (HttpURLConnection) url.openConnection();
             inputStream = new BufferedInputStream(urlConnection.getInputStream());
             XmlPullParser parser = Xml.newPullParser();
@@ -167,7 +166,7 @@ public class LoaderTask extends AsyncTask<Void, Void, Void> {
         }
     }
 
-    String average(String s1, String s2, boolean isTemperature) {
+    private String average(String s1, String s2, boolean isTemperature) {
         String s;
         int intS1 = Integer.parseInt(s1);
         int intS2 = Integer.parseInt(s2);

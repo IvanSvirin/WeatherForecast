@@ -9,7 +9,6 @@ import android.widget.TextView;
  * Created by ivansv on 26.12.2015.
  */
 public class DetailActivity extends AppCompatActivity {
-    ForecastItem forecastItem;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -17,7 +16,7 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.detail_activity);
 
         Intent intent = getIntent();
-        forecastItem = intent.getParcelableExtra(MainActivity.DATA);
+        ForecastItem forecastItem = intent.getParcelableExtra(MainActivity.DATA);
 
         char degree = 0x00B0;
         TextView tvWhen = (TextView) findViewById(R.id.detailWhen);

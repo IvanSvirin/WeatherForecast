@@ -4,16 +4,16 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class ForecastItem implements Parcelable{
-    public String dayTime;
-    public String date;
-    public String temperature;
-    public String cloudiness;
-    public String precipitation;
-    public String pressure;
-    public String windSpeed;
-    public String windDirection;
-    public String wetness;
-    public String realFeel;
+    private String dayTime;
+    private String date;
+    private String temperature;
+    private String cloudiness;
+    private String precipitation;
+    private String pressure;
+    private String windSpeed;
+    private String windDirection;
+    private String wetness;
+    private String realFeel;
 
     public ForecastItem() {}
 

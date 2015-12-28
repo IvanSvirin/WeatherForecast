@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 
 public class StartFragment extends Fragment {
 
-
     public StartFragment() {
     }
 

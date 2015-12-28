@@ -72,13 +72,13 @@ public class LoaderTask extends AsyncTask<Void, Void, Void> {
                             String dayTime = null;
                             switch (parser.getAttributeValue(3)) {
                                 case "03":
-                                    dayTime = "ночь ";
+                                    dayTime = "ночь  ";
                                     break;
                                 case "09":
-                                    dayTime = "утро ";
+                                    dayTime = "утро  ";
                                     break;
                                 case "15":
-                                    dayTime = "день ";
+                                    dayTime = "день  ";
                                     break;
                                 case "21":
                                     dayTime = "вечер";

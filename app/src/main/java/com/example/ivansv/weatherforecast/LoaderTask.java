@@ -22,10 +22,10 @@ public class LoaderTask extends AsyncTask<Void, Void, Void> {
     Activity activity;
     AsyncTaskListener asyncTaskListener;
     ArrayList<ForecastItem> forecastItems;
-    static InputStream is = null;
+    static InputStream inputStream = null;
     static URL url = null;
     static HttpURLConnection urlConnection;
-    boolean connection = true;
+    boolean isConnection = true;
 
     public LoaderTask(Activity activity, AsyncTaskListener asyncTaskListener, ArrayList<ForecastItem> forecastItems) {
         this.activity = activity;
@@ -43,20 +43,20 @@ public class LoaderTask extends AsyncTask<Void, Void, Void> {
         try {
             url = new URL(urlString);
             urlConnection = (HttpURLConnection) url.openConnection();
-            is = new BufferedInputStream(urlConnection.getInputStream());
+            inputStream = new BufferedInputStream(urlConnection.getInputStream());
             XmlPullParser parser = Xml.newPullParser();
             parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
-            parser.setInput(is, null);
+            parser.setInput(inputStream, null);
             parseXml(parser);
-            is.close();
-            urlConnection.disconnect();
+            inputStream.close();
         } catch (IOException e) {
             e.printStackTrace();
-            connection = false;
+            isConnection = false;
         } catch (XmlPullParserException e) {
             e.printStackTrace();
+        } finally {
+            urlConnection.disconnect();
         }
-
     }
 
     private void parseXml(XmlPullParser parser) {
@@ -168,7 +168,7 @@ public class LoaderTask extends AsyncTask<Void, Void, Void> {
     }
 
     String average(String s1, String s2, boolean isTemperature) {
-        String s = null;
+        String s;
         int intS1 = Integer.parseInt(s1);
         int intS2 = Integer.parseInt(s2);
         int intS = (intS1 + intS2) / 2;
@@ -183,7 +183,7 @@ public class LoaderTask extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
-        if (!connection) {
+        if (!isConnection || inputStream == null || forecastItems.size() < 4) {
             Toast.makeText(activity, "Нет соединения! Проверьте подключение к интеренту!", Toast.LENGTH_SHORT).show();
         } else {
             asyncTaskListener.onAsyncTaskFinished();

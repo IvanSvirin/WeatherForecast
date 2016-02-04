@@ -12,20 +12,20 @@ public class MainActivity extends AppCompatActivity implements ListFragment.OnLi
     private StartFragment startFragment = new StartFragment();
     private ListFragment listFragment = new ListFragment();
     public static final String DATA = "DATA";
+    public static Place place;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.mainContainer, startFragment)
-                .commit();
+        place = new Place();
+        new LoaderTask(this, this, items, place).execute();
     }
 
     public void update(View view) {
         items = new ArrayList<>();
-        new LoaderTask(this, this, items).execute();
+        new LoaderTask(this, this, items, place).execute();
     }
 
     @Override
@@ -38,7 +38,10 @@ public class MainActivity extends AppCompatActivity implements ListFragment.OnLi
     @Override
     public void onAsyncTaskFinished() {
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.mainContainer, listFragment)
+                .add(R.id.mainContainer, startFragment)
                 .commit();
+//        getSupportFragmentManager().beginTransaction()
+//                .replace(R.id.mainContainer, listFragment)
+//                .commit();
     }
 }

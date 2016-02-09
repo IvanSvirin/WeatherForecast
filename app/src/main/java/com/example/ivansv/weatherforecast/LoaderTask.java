@@ -4,8 +4,6 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.AsyncTask;
@@ -28,7 +26,6 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by ivansv on 24.12.2015.
@@ -156,19 +153,19 @@ public class LoaderTask extends AsyncTask<Void, Void, Void> {
         place.setLongitude(location.getLongitude());
 
 
-        Geocoder geocoder = new Geocoder(activity);
-        try {
-            List<Address> addressList = geocoder.getFromLocation(place.getLatitude(), place.getLongitude(), 5);
-            if (addressList.size() > 0) {
-                Address address = addressList.get(0);
-                place.setName(address.getCountryName() + "\n"
-                        + address.getLocality() + "\n"
-                        + address.getThoroughfare() + "\n"
-                        + address.getSubThoroughfare());
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        Geocoder geocoder = new Geocoder(activity);
+//        try {
+//            List<Address> addressList = geocoder.getFromLocation(place.getLatitude(), place.getLongitude(), 5);
+//            if (addressList.size() > 0) {
+//                Address address = addressList.get(0);
+//                place.setName(address.getCountryName() + "\n"
+//                        + address.getLocality() + "\n"
+//                        + address.getThoroughfare() + "\n"
+//                        + address.getSubThoroughfare());
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
     private void loadXml(String urlString) {

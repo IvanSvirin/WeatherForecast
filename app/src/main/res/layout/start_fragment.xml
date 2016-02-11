@@ -155,7 +155,8 @@
         android:paddingRight="5sp"
         android:layout_below="@+id/cloudinessValue"
         android:layout_alignParentLeft="false"
-        android:layout_alignParentRight="true" />
+        android:layout_alignParentRight="true"
+        android:text="xxx" />
 
     <TextView
         android:layout_width="wrap_content"

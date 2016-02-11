@@ -1,47 +1,76 @@
 package com.example.ivansv.weatherforecast;
 
-import android.content.Intent;
+import android.Manifest;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 
-import java.util.ArrayList;
+import com.example.ivansv.weatherforecast.ForecastModel.Forecast;
 
-public class MainActivity extends AppCompatActivity implements ListFragment.OnListFragmentInteractionListener, AsyncTaskListener {
-    public static ArrayList<ForecastItem> items;
-    private StartFragment startFragment = new StartFragment();
-    private ListFragment listFragment = new ListFragment();
-    public static final String DATA = "DATA";
-    public static Place place;
+import retrofit.RestAdapter;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
+
+
+public class MainActivity extends AppCompatActivity {
+    public static final String API_KEY = "138b3901759ae9758770c6acef29b4a7";
+    private Location location;
+    public static final int ACCESS_LOCATION_PERMISSION = 1;
+    private String url = "http://api.openweathermap.org/data/2.5";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.start_fragment);
 
-        place = new Place();
-        new LoaderTask(this, this, items, place).execute();
+        final TextView tvTemperature = (TextView) findViewById(R.id.temperatureValue);
+        final TextView tvCloudiness = (TextView) findViewById(R.id.cloudinessValue);
+        final TextView tvWindSpeed = (TextView) findViewById(R.id.windValue);
+        final TextView tvPressure = (TextView) findViewById(R.id.pressureValue);
+        final TextView tvWetness = (TextView) findViewById(R.id.wetnessValue);
+
+        location = getLocation();
+        RestAdapter restAdapter = new RestAdapter.Builder()
+                .setEndpoint(url)
+                .build();
+        RestInterface restInterface = restAdapter.create(RestInterface.class);
+        restInterface.getWeatherReport(String.valueOf(location.getLatitude()),String.valueOf(location.getLongitude()),
+                API_KEY, new Callback<Forecast>() {
+            @Override
+            public void success(Forecast forecast, Response response) {
+                tvTemperature.setText(String.valueOf((int) (forecast.getMain().getTemp() - 273.15)));
+                tvCloudiness.setText(String.valueOf(forecast.getClouds().getAll()));
+                tvWindSpeed.setText(String.valueOf((int) (forecast.getWind().getSpeed() * 1)));
+                tvPressure.setText(String.valueOf((int) (forecast.getMain().getPressure() * 0.75006375541921)));
+                tvWetness.setText(String.valueOf(forecast.getMain().getHumidity()));
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Toast.makeText(MainActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
-    public void update(View view) {
-        items = new ArrayList<>();
-        new LoaderTask(this, this, items, place).execute();
-    }
-
-    @Override
-    public void onListFragmentInteraction(ForecastItem item) {
-        Intent intent = new Intent(this, DetailActivity.class);
-        intent.putExtra(DATA, item);
-        startActivity(intent);
-    }
-
-    @Override
-    public void onAsyncTaskFinished() {
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.mainContainer, startFragment)
-                .commit();
-//        getSupportFragmentManager().beginTransaction()
-//                .replace(R.id.mainContainer, listFragment)
-//                .commit();
+    private Location getLocation() {
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION}, ACCESS_LOCATION_PERMISSION);
+        }
+        Location location = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
+        return location;
     }
 }

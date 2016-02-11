@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
         final TextView tvWetness = (TextView) findViewById(R.id.wetnessValue);
 
         location = getLocation();
+
         RestAdapter restAdapter = new RestAdapter.Builder()
                 .setEndpoint(url)
                 .build();

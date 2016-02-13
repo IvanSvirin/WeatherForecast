@@ -1,0 +1,54 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#09C"
+    android:padding="@dimen/widget_margin">
+
+    <TextView
+        android:id="@+id/temperature"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#09C"
+        android:textColor="#ffffff"
+        android:textSize="60sp"
+        android:textStyle="bold|italic"
+        android:text="22"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="40dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="50dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="City"
+        android:id="@+id/name"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/temperature"
+        android:layout_toEndOf="@+id/temperature"
+        android:layout_marginLeft="46dp"
+        android:layout_marginStart="46dp"
+        android:textSize="24sp"
+        android:textColor="#ffff" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Text"
+        android:id="@+id/pressure"
+        android:layout_alignTop="@+id/temperature"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Text"
+        android:id="@+id/wind"
+        android:layout_alignBaseline="@+id/temperature"
+        android:layout_alignBottom="@+id/temperature"
+        android:layout_alignLeft="@+id/pressure"
+        android:layout_alignStart="@+id/pressure" />
+
+</RelativeLayout>

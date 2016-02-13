@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.start_fragment);
 
+        final TextView tvName = (TextView) findViewById(R.id.placeTextView);
         final TextView tvTemperature = (TextView) findViewById(R.id.temperatureValue);
         final TextView tvCloudiness = (TextView) findViewById(R.id.cloudinessValue);
         final TextView tvWindSpeed = (TextView) findViewById(R.id.windValue);
@@ -47,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
                 API_KEY, new Callback<Forecast>() {
             @Override
             public void success(Forecast forecast, Response response) {
+                tvName.setText(forecast.getName());
                 tvTemperature.setText(String.valueOf((int) (forecast.getMain().getTemp() - 273.15)));
                 tvCloudiness.setText(String.valueOf(forecast.getClouds().getAll()));
                 tvWindSpeed.setText(String.valueOf((int) (forecast.getWind().getSpeed() * 1)));
@@ -71,7 +73,6 @@ public class MainActivity extends AppCompatActivity {
             requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
                     Manifest.permission.ACCESS_COARSE_LOCATION}, ACCESS_LOCATION_PERMISSION);
         }
-        Location location = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
-        return location;
+        return locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
     }
 }

@@ -33,6 +33,7 @@
         <receiver android:name=".WeatherWidget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.example.ivansv.weatherforecast.ACTION_RETRY"/>
             </intent-filter>
 
             <meta-data
@@ -43,9 +44,8 @@
         <service
             android:name=".UpdateService"
             android:enabled="true"
-            android:exported="true">
+            android:exported="false"/>
 
-        </service>
     </application>
 
 </manifest>

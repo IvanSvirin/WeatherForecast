@@ -1,6 +1,7 @@
 package com.example.ivansv.weatherforecast;
 
 import android.Manifest;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
@@ -78,6 +79,15 @@ public class UpdateService extends Service {
             view.setTextViewText(R.id.pressure, pressure);
             view.setTextViewText(R.id.wind, wind);
             manager.updateAppWidget(thisWidget, view);
+        }
+        if (placeName == null) {
+            Intent retryIntent = new Intent(this, WeatherWidget.class);
+            retryIntent.setAction(WeatherWidget.ACTION_RETRY);
+            try {
+                PendingIntent.getBroadcast(this, 0, retryIntent,0).send();
+            } catch (PendingIntent.CanceledException e) {
+                e.printStackTrace();
+            }
         }
         return super.onStartCommand(intent, flags, startId);
     }

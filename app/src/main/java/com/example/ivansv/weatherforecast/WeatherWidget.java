@@ -16,8 +16,9 @@ import java.util.Calendar;
  */
 public class WeatherWidget extends AppWidgetProvider {
     private static PendingIntent updateServicePendingIntent = null;
-    private static Intent intent;
+    private static Intent updateServiceIntent;
     private static AlarmManager alarmManager;
+    public static final String ACTION_RETRY = "ACTION_RETRY";
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
@@ -35,13 +36,26 @@ public class WeatherWidget extends AppWidgetProvider {
         TIME.set(Calendar.SECOND, 0);
         TIME.set(Calendar.MILLISECOND, 0);
 
-//        final Intent intent = new Intent(context, UpdateService.class);
-        intent = new Intent(context, UpdateService.class);
+//        final Intent updateServiceIntent = new Intent(context, UpdateService.class);
+        updateServiceIntent = new Intent(context, UpdateService.class);
         if (updateServicePendingIntent == null) {
-            updateServicePendingIntent = PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+            updateServicePendingIntent = PendingIntent.getService(context, 0, updateServiceIntent, PendingIntent.FLAG_CANCEL_CURRENT);
         }
 
-        alarmManager.setRepeating(AlarmManager.RTC, TIME.getTime().getTime(), 20 * 1000, updateServicePendingIntent);
+        alarmManager.setRepeating(AlarmManager.RTC, TIME.getTime().getTime(), 60 * 1000, updateServicePendingIntent);
+    }
+
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        super.onReceive(context, intent);
+        final String action = intent.getAction();
+        if (action.equals(ACTION_RETRY)) {
+            try {
+                updateServicePendingIntent.send();
+            } catch (PendingIntent.CanceledException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
@@ -54,8 +68,8 @@ public class WeatherWidget extends AppWidgetProvider {
         super.onDisabled(context);
 //        final AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         alarmManager.cancel(updateServicePendingIntent);
-//        final Intent intent = new Intent(context, UpdateService.class);
-        context.stopService(intent);
+//        final Intent updateServiceIntent = new Intent(context, UpdateService.class);
+        context.stopService(updateServiceIntent);
     }
 
     @Override

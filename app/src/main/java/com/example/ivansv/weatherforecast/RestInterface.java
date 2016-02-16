@@ -6,7 +6,6 @@ import retrofit.http.GET;
 import retrofit.http.Query;
 import retrofit.Callback;
 
-
 /**
  * Created by ivansv on 10.02.2016.
  */

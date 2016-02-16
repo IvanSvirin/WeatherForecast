@@ -13,8 +13,10 @@ import android.os.Build;
 import android.os.IBinder;
 import android.support.v4.app.ActivityCompat;
 import android.widget.RemoteViews;
+import android.widget.Toast;
 
 import com.example.ivansv.weatherforecast.ForecastModel.Forecast;
+import com.squareup.picasso.Picasso;
 
 import retrofit.Callback;
 import retrofit.RestAdapter;
@@ -26,11 +28,13 @@ public class UpdateService extends Service {
     private Location location;
     public static final int ACCESS_LOCATION_PERMISSION = 1;
     private String url = "http://api.openweathermap.org/data/2.5";
+    private String imageUrl = "http://openweathermap.org/img/w/";
     private String placeName;
     private String temperature;
     private String pressure;
     private String wind;
-
+    private String icon;
+    private char degree = 0x00B0;
 
     public UpdateService() {
     }
@@ -38,6 +42,7 @@ public class UpdateService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         location = getLocation();
+
         RestAdapter restAdapter = new RestAdapter.Builder()
                 .setEndpoint(url)
                 .build();
@@ -46,10 +51,13 @@ public class UpdateService extends Service {
                 API_KEY, new Callback<Forecast>() {
                     @Override
                     public void success(Forecast forecast, Response response) {
+                        Toast.makeText(UpdateService.this, placeName, Toast.LENGTH_SHORT).show();
                         placeName = forecast.getName();
-                        temperature = String.valueOf((int) (forecast.getMain().getTemp() - 273.15));
-                        wind = String.valueOf((int) (forecast.getWind().getSpeed() * 1));
-                        pressure = String.valueOf((int) (forecast.getMain().getPressure() * 0.75006375541921));
+                        temperature = String.valueOf((int) (forecast.getMain().getTemp() - 273.15)) + degree + "C";
+                        wind = getWindDirection(forecast.getWind().getDeg()) + " " +
+                                String.valueOf((int) (forecast.getWind().getSpeed() * 1)) + " m/s";
+                        pressure = String.valueOf((int) (forecast.getMain().getPressure() * 0.75006375541921)) + " mm Hg";
+                        icon = forecast.getWeather().get(0).getIcon() + ".png";
                     }
 
                     @Override
@@ -57,15 +65,20 @@ public class UpdateService extends Service {
                     }
                 });
 
-        RemoteViews view = new RemoteViews(getPackageName(), R.layout.weather_widget);
-        view.setTextViewText(R.id.name, placeName);
-        view.setTextViewText(R.id.temperature, temperature);
-        view.setTextViewText(R.id.pressure, pressure);
-        view.setTextViewText(R.id.wind, wind);
-        ComponentName thisWidget = new ComponentName(this, WeatherWidget.class);
-        AppWidgetManager manager = AppWidgetManager.getInstance(this);
-        manager.updateAppWidget(thisWidget, view);
-
+        if (placeName != null) {
+            RemoteViews view = new RemoteViews(getPackageName(), R.layout.weather_widget);
+            AppWidgetManager manager = AppWidgetManager.getInstance(this);
+            ComponentName thisWidget = new ComponentName(this, WeatherWidget.class);
+            Picasso.with(getApplicationContext())
+                    .load(imageUrl + icon)
+                    .resizeDimen(R.dimen.icon_width, R.dimen.icon_height)
+                    .into(view, R.id.weatherIcon, manager.getAppWidgetIds(thisWidget));
+            view.setTextViewText(R.id.name, placeName);
+            view.setTextViewText(R.id.temperature, temperature);
+            view.setTextViewText(R.id.pressure, pressure);
+            view.setTextViewText(R.id.wind, wind);
+            manager.updateAppWidget(thisWidget, view);
+        }
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -80,6 +93,40 @@ public class UpdateService extends Service {
 //                    Manifest.permission.ACCESS_COARSE_LOCATION}, ACCESS_LOCATION_PERMISSION);
         }
         return locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
+    }
+
+    private String getWindDirection(Double deg) {
+        String windDirection = null;
+        switch ((int) (deg + 22.5) / 45) {
+            case 0:
+                windDirection = "N";
+                break;
+            case 1:
+                windDirection = "NE";
+                break;
+            case 2:
+                windDirection = "E";
+                break;
+            case 3:
+                windDirection = "SE";
+                break;
+            case 4:
+                windDirection = "S";
+                break;
+            case 5:
+                windDirection = "SW";
+                break;
+            case 6:
+                windDirection = "W";
+                break;
+            case 7:
+                windDirection = "NW";
+                break;
+            case 8:
+                windDirection = "N";
+                break;
+        }
+        return windDirection;
     }
 
 

@@ -12,14 +12,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.Toast;
-
-import com.example.ivansv.weatherforecast.ForecastModel.Forecast;
-
-import retrofit.Callback;
-import retrofit.RestAdapter;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 
 /**
  * Created by ivansv on 12.02.2016.
@@ -60,25 +52,25 @@ public class ConfigureActivity extends AppCompatActivity {
 
         location = getLocation();
 
-        RestAdapter restAdapter = new RestAdapter.Builder()
-                .setEndpoint(url)
-                .build();
-        RestInterface restInterface = restAdapter.create(RestInterface.class);
-        restInterface.getWeatherReport(String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()),
-                API_KEY, new Callback<Forecast>() {
-                    @Override
-                    public void success(Forecast forecast, Response response) {
-                        placeName = forecast.getName();
-                        Toast.makeText(ConfigureActivity.this, "This is place " + placeName, Toast.LENGTH_SHORT).show();
-                        temperature = String.valueOf((int) (forecast.getMain().getTemp() - 273.15));
-                        wind = String.valueOf((int) (forecast.getWind().getSpeed() * 1));
-                        pressure = String.valueOf((int) (forecast.getMain().getPressure() * 0.75006375541921));
-                    }
-
-                    @Override
-                    public void failure(RetrofitError error) {
-                    }
-                });
+//        RestAdapter restAdapter = new RestAdapter.Builder()
+//                .setEndpoint(url)
+//                .build();
+//        RestInterface restInterface = restAdapter.create(RestInterface.class);
+//        restInterface.getWeatherReport(String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()),
+//                API_KEY, new Callback<Forecast>() {
+//                    @Override
+//                    public void success(Forecast forecast, Response response) {
+//                        placeName = forecast.getName();
+//                        Toast.makeText(ConfigureActivity.this, "This is place " + placeName, Toast.LENGTH_SHORT).show();
+//                        temperature = String.valueOf((int) (forecast.getMain().getTemp() - 273.15));
+//                        wind = String.valueOf((int) (forecast.getWind().getSpeed() * 1));
+//                        pressure = String.valueOf((int) (forecast.getMain().getPressure() * 0.75006375541921));
+//                    }
+//
+//                    @Override
+//                    public void failure(RetrofitError error) {
+//                    }
+//                });
 //        placeName = "name";
 //        temperature = "22";
 //        pressure = "750";

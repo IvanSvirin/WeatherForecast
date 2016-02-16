@@ -15,30 +15,61 @@ import java.util.Calendar;
  * Created by ivansv on 12.02.2016.
  */
 public class WeatherWidget extends AppWidgetProvider {
-    private PendingIntent updateService = null;
+    private static PendingIntent updateServicePendingIntent = null;
+    private static Intent intent;
+    private static AlarmManager alarmManager;
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        super.onUpdate(context, appWidgetManager, appWidgetIds);
+//        super.onUpdate(context, appWidgetManager, appWidgetIds);
 //        SharedPreferences sp = context.getSharedPreferences(
 //                ConfigureActivity.WIDGET_PREF, Context.MODE_PRIVATE);
 //        for (int id : appWidgetIds) {
 //            updateWidget(context, appWidgetManager, sp, id);
 //        }
-        final AlarmManager m = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+//        final AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
         final Calendar TIME = Calendar.getInstance();
         TIME.set(Calendar.MINUTE, 0);
         TIME.set(Calendar.SECOND, 0);
         TIME.set(Calendar.MILLISECOND, 0);
 
-        final Intent i = new Intent(context, UpdateService.class);
-
-        if (updateService == null) {
-            updateService = PendingIntent.getService(context, 0, i, PendingIntent.FLAG_CANCEL_CURRENT);
+//        final Intent intent = new Intent(context, UpdateService.class);
+        intent = new Intent(context, UpdateService.class);
+        if (updateServicePendingIntent == null) {
+            updateServicePendingIntent = PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
         }
 
-        m.setRepeating(AlarmManager.RTC, TIME.getTime().getTime(), 1000 * 60, updateService);
+        alarmManager.setRepeating(AlarmManager.RTC, TIME.getTime().getTime(), 20 * 1000, updateServicePendingIntent);
+    }
+
+    @Override
+    public void onEnabled(Context context) {
+        super.onEnabled(context);
+    }
+
+    @Override
+    public void onDisabled(Context context) {
+        super.onDisabled(context);
+//        final AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.cancel(updateServicePendingIntent);
+//        final Intent intent = new Intent(context, UpdateService.class);
+        context.stopService(intent);
+    }
+
+    @Override
+    public void onDeleted(Context context, int[] appWidgetIds) {
+        super.onDeleted(context, appWidgetIds);
+//        SharedPreferences.Editor editor = context.getSharedPreferences(
+//                ConfigureActivity.WIDGET_PREF, Context.MODE_PRIVATE).edit();
+//        for (int widgetID : appWidgetIds) {
+//            editor.remove(ConfigureActivity.WIDGET_PLACE_NAME);
+//            editor.remove(ConfigureActivity.WIDGET_TEMPERATURE);
+//            editor.remove(ConfigureActivity.WIDGET_PRESSURE);
+//            editor.remove(ConfigureActivity.WIDGET_WIND);
+//        }
+//        editor.commit();
     }
 
     static void updateWidget(Context context, AppWidgetManager appWidgetManager, SharedPreferences sp,
@@ -57,31 +88,5 @@ public class WeatherWidget extends AppWidgetProvider {
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }
 
-
-    @Override
-    public void onEnabled(Context context) {
-        super.onEnabled(context);
-    }
-
-    @Override
-    public void onDisabled(Context context) {
-        super.onDisabled(context);
-        final AlarmManager m = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        m.cancel(updateService);
-    }
-
-    @Override
-    public void onDeleted(Context context, int[] appWidgetIds) {
-        super.onDeleted(context, appWidgetIds);
-//        SharedPreferences.Editor editor = context.getSharedPreferences(
-//                ConfigureActivity.WIDGET_PREF, Context.MODE_PRIVATE).edit();
-//        for (int widgetID : appWidgetIds) {
-//            editor.remove(ConfigureActivity.WIDGET_PLACE_NAME);
-//            editor.remove(ConfigureActivity.WIDGET_TEMPERATURE);
-//            editor.remove(ConfigureActivity.WIDGET_PRESSURE);
-//            editor.remove(ConfigureActivity.WIDGET_WIND);
-//        }
-//        editor.commit();
-    }
 }
 

@@ -1,6 +1,6 @@
 package com.example.ivansv.weatherforecast;
 
-import com.example.ivansv.weatherforecast.ForecastModel.Forecast;
+import com.example.ivansv.weatherforecast.CurrentWeatherModel.CurrentWeather;
 
 import retrofit.http.GET;
 import retrofit.http.Query;
@@ -15,6 +15,6 @@ public interface RestInterface {
     void getWeatherReport(@Query("lat") String lat,
                           @Query("lon") String lon,
                           @Query("APPID") String APPID,
-                          Callback<Forecast> cb);
+                          Callback<CurrentWeather> cb);
 
 }

@@ -44,9 +44,9 @@ public class MainActivity extends AppCompatActivity {
 //                .build();
 //        RestInterface restInterface = restAdapter.create(RestInterface.class);
 //        restInterface.getWeatherReport(String.valueOf(location.getLatitude()),String.valueOf(location.getLongitude()),
-//                API_KEY, new Callback<Forecast>() {
+//                API_KEY, new Callback<CurrentWeather>() {
 //            @Override
-//            public void success(Forecast forecast, Response response) {
+//            public void success(CurrentWeather forecast, Response response) {
 //                tvName.setText(forecast.getName());
 //                tvTemperature.setText(String.valueOf((int) (forecast.getMain().getTemp() - 273.15)));
 //                tvCloudiness.setText(String.valueOf(forecast.getClouds().getAll()));

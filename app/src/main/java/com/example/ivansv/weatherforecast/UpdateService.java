@@ -16,7 +16,7 @@ import android.support.v4.app.ActivityCompat;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
-import com.example.ivansv.weatherforecast.ForecastModel.Forecast;
+import com.example.ivansv.weatherforecast.CurrentWeatherModel.CurrentWeather;
 import com.squareup.picasso.Picasso;
 
 import retrofit.Callback;
@@ -49,16 +49,16 @@ public class UpdateService extends Service {
                 .build();
         RestInterface restInterface = restAdapter.create(RestInterface.class);
         restInterface.getWeatherReport(String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()),
-                API_KEY, new Callback<Forecast>() {
+                API_KEY, new Callback<CurrentWeather>() {
                     @Override
-                    public void success(Forecast forecast, Response response) {
+                    public void success(CurrentWeather currentWeather, Response response) {
                         Toast.makeText(UpdateService.this, placeName, Toast.LENGTH_SHORT).show();
-                        placeName = forecast.getName();
-                        temperature = String.valueOf((int) (forecast.getMain().getTemp() - 273.15)) + degree + "C";
-                        wind = getWindDirection(forecast.getWind().getDeg()) + " " +
-                                String.valueOf((int) (forecast.getWind().getSpeed() * 1)) + " m/s";
-                        pressure = String.valueOf((int) (forecast.getMain().getPressure() * 0.75006375541921)) + " mm Hg";
-                        icon = forecast.getWeather().get(0).getIcon() + ".png";
+                        placeName = currentWeather.getName();
+                        temperature = String.valueOf((int) (currentWeather.getMain().getTemp() - 273.15)) + degree + "C";
+                        wind = getWindDirection(currentWeather.getWind().getDeg()) + " " +
+                                String.valueOf((int) (currentWeather.getWind().getSpeed() * 1)) + " m/s";
+                        pressure = String.valueOf((int) (currentWeather.getMain().getPressure() * 0.75006375541921)) + " mm Hg";
+                        icon = currentWeather.getWeather().get(0).getIcon() + ".png";
                     }
 
                     @Override
@@ -79,12 +79,11 @@ public class UpdateService extends Service {
             view.setTextViewText(R.id.pressure, pressure);
             view.setTextViewText(R.id.wind, wind);
             manager.updateAppWidget(thisWidget, view);
-        }
-        if (placeName == null) {
+        } else {
             Intent retryIntent = new Intent(this, WeatherWidget.class);
             retryIntent.setAction(WeatherWidget.ACTION_RETRY);
             try {
-                PendingIntent.getBroadcast(this, 0, retryIntent,0).send();
+                PendingIntent.getBroadcast(this, 0, retryIntent, 0).send();
             } catch (PendingIntent.CanceledException e) {
                 e.printStackTrace();
             }

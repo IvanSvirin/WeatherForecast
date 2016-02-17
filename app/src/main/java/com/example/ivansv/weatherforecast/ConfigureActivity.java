@@ -57,9 +57,9 @@ public class ConfigureActivity extends AppCompatActivity {
 //                .build();
 //        RestInterface restInterface = restAdapter.create(RestInterface.class);
 //        restInterface.getWeatherReport(String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()),
-//                API_KEY, new Callback<Forecast>() {
+//                API_KEY, new Callback<CurrentWeather>() {
 //                    @Override
-//                    public void success(Forecast forecast, Response response) {
+//                    public void success(CurrentWeather forecast, Response response) {
 //                        placeName = forecast.getName();
 //                        Toast.makeText(ConfigureActivity.this, "This is place " + placeName, Toast.LENGTH_SHORT).show();
 //                        temperature = String.valueOf((int) (forecast.getMain().getTemp() - 273.15));

@@ -1,6 +1,7 @@
 package com.example.ivansv.weatherforecast;
 
 import android.Manifest;
+import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.appwidget.AppWidgetManager;
@@ -25,9 +26,9 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 public class UpdateService extends Service {
-    public static final String API_KEY = "138b3901759ae9758770c6acef29b4a7";
+    private static final String API_KEY = "138b3901759ae9758770c6acef29b4a7";
     private Location location;
-    public static final int ACCESS_LOCATION_PERMISSION = 1;
+    private static final int ACCESS_LOCATION_PERMISSION = 1;
     private String url = "http://api.openweathermap.org/data/2.5";
     private String imageUrl = "http://openweathermap.org/img/w/";
     private String placeName;
@@ -36,8 +37,23 @@ public class UpdateService extends Service {
     private String wind;
     private String icon;
     private char degree = 0x00B0;
+    private static Intent restartIntent;
+    private static PendingIntent restartPendingIntent = null;
+    private static AlarmManager alarmManager;
+    private boolean isConnect = false;
+    public static final String CONNECTION_STATE = "CONNECTION_STATE";
+    public static final String ACTION_RETRY = "ACTION_RETRY";
+
 
     public UpdateService() {
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+//        alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+//        restartIntent = new Intent(this, UpdateService.class);
+//        restartPendingIntent = PendingIntent.getService(this, 0, restartIntent, PendingIntent.FLAG_CANCEL_CURRENT);
     }
 
     @Override
@@ -59,36 +75,92 @@ public class UpdateService extends Service {
                                 String.valueOf((int) (currentWeather.getWind().getSpeed() * 1)) + " m/s";
                         pressure = String.valueOf((int) (currentWeather.getMain().getPressure() * 0.75006375541921)) + " mm Hg";
                         icon = currentWeather.getWeather().get(0).getIcon() + ".png";
+                        isConnect = true;
+
+                        if (placeName != null) {
+                            sendSuccessBroadcast();
+                            updateWidget();
+                        } else {
+                            sendErrorBroadcast();
+                        }
                     }
 
                     @Override
                     public void failure(RetrofitError error) {
+                        isConnect = false;
+                        Toast.makeText(UpdateService.this, "No connection", Toast.LENGTH_SHORT).show();
+                        sendErrorBroadcast();
                     }
                 });
 
-        if (placeName != null) {
-            RemoteViews view = new RemoteViews(getPackageName(), R.layout.weather_widget);
-            AppWidgetManager manager = AppWidgetManager.getInstance(this);
-            ComponentName thisWidget = new ComponentName(this, WeatherWidget.class);
-            Picasso.with(getApplicationContext())
-                    .load(imageUrl + icon)
-                    .resizeDimen(R.dimen.icon_width, R.dimen.icon_height)
-                    .into(view, R.id.weatherIcon, manager.getAppWidgetIds(thisWidget));
-            view.setTextViewText(R.id.name, placeName);
-            view.setTextViewText(R.id.temperature, temperature);
-            view.setTextViewText(R.id.pressure, pressure);
-            view.setTextViewText(R.id.wind, wind);
-            manager.updateAppWidget(thisWidget, view);
-        } else {
-            Intent retryIntent = new Intent(this, WeatherWidget.class);
-            retryIntent.setAction(WeatherWidget.ACTION_RETRY);
-            try {
-                PendingIntent.getBroadcast(this, 0, retryIntent, 0).send();
-            } catch (PendingIntent.CanceledException e) {
-                e.printStackTrace();
-            }
-        }
-        return super.onStartCommand(intent, flags, startId);
+//        if (placeName != null && isConnect) {
+//            RemoteViews view = new RemoteViews(getPackageName(), R.layout.weather_widget);
+//            AppWidgetManager manager = AppWidgetManager.getInstance(this);
+//            ComponentName thisWidget = new ComponentName(this, WeatherWidget.class);
+//            Picasso.with(getApplicationContext())
+//                    .load(imageUrl + icon)
+//                    .resizeDimen(R.dimen.icon_width, R.dimen.icon_height)
+//                    .into(view, R.id.weatherIcon, manager.getAppWidgetIds(thisWidget));
+//            view.setTextViewText(R.id.name, placeName);
+//            view.setTextViewText(R.id.temperature, temperature);
+//            view.setTextViewText(R.id.pressure, pressure);
+//            view.setTextViewText(R.id.wind, wind);
+//            manager.updateAppWidget(thisWidget, view);
+
+//            alarmManager.cancel(restartPendingIntent);
+//            alarmManager.set(AlarmManager.RTC, System.currentTimeMillis() + 30 * 1000, restartPendingIntent);
+//        } else {
+//            isConnect = false;
+
+//            alarmManager.cancel(restartPendingIntent);
+//            alarmManager.set(AlarmManager.RTC, System.currentTimeMillis() + 15 * 1000, restartPendingIntent);
+//        }
+//        Intent retryIntent = new Intent(this, WeatherWidget.class);
+//        retryIntent.setAction(ACTION_RETRY);
+//        retryIntent.putExtra(CONNECTION_STATE, isConnect);
+//        try {
+//            PendingIntent.getBroadcast(this, 0, retryIntent, 0).send();
+//        } catch (PendingIntent.CanceledException e) {
+//            e.printStackTrace();
+//        }
+
+//        return super.onStartCommand(intent, flags, startId);
+        return START_STICKY;
+    }
+
+    private void updateWidget() {
+        RemoteViews view = new RemoteViews(getPackageName(), R.layout.weather_widget);
+        AppWidgetManager manager = AppWidgetManager.getInstance(this);
+        ComponentName thisWidget = new ComponentName(this, WeatherWidget.class);
+        Picasso.with(getApplicationContext())
+                .load(imageUrl + icon)
+                .resizeDimen(R.dimen.icon_width, R.dimen.icon_height)
+                .into(view, R.id.weatherIcon, manager.getAppWidgetIds(thisWidget));
+        view.setTextViewText(R.id.name, placeName);
+        view.setTextViewText(R.id.temperature, temperature);
+        view.setTextViewText(R.id.pressure, pressure);
+        view.setTextViewText(R.id.wind, wind);
+        manager.updateAppWidget(thisWidget, view);
+    }
+
+    private void sendErrorBroadcast() {
+        Intent retryIntent = new Intent(this, WeatherWidget.class);
+        retryIntent.setAction(ACTION_RETRY);
+        retryIntent.putExtra(CONNECTION_STATE, false);
+        sendBroadcast(retryIntent);
+    }
+
+    private void sendSuccessBroadcast() {
+        Intent retryIntent = new Intent(this, WeatherWidget.class);
+        retryIntent.setAction(ACTION_RETRY);
+        retryIntent.putExtra(CONNECTION_STATE, true);
+        sendBroadcast(retryIntent);
+    }
+
+    @Override
+    public void onDestroy() {
+//        alarmManager.cancel(restartPendingIntent);
+        super.onDestroy();
     }
 
     private Location getLocation() {

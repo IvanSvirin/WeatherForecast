@@ -8,17 +8,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.widget.RemoteViews;
-
-import java.util.Calendar;
+import android.widget.Toast;
 
 /**
  * Created by ivansv on 12.02.2016.
  */
 public class WeatherWidget extends AppWidgetProvider {
-    private static PendingIntent updateServicePendingIntent = null;
-    private static Intent updateServiceIntent;
-    private static AlarmManager alarmManager;
-    public static final String ACTION_RETRY = "ACTION_RETRY";
+    private static PendingIntent restartServicePendingIntent;
+    private static Intent restartServiceIntent;
+    private static AlarmManager restartServiceAlarmManager;
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
@@ -29,31 +27,40 @@ public class WeatherWidget extends AppWidgetProvider {
 //            updateWidget(context, appWidgetManager, sp, id);
 //        }
 //        final AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
-        final Calendar TIME = Calendar.getInstance();
-        TIME.set(Calendar.MINUTE, 0);
-        TIME.set(Calendar.SECOND, 0);
-        TIME.set(Calendar.MILLISECOND, 0);
+//        alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+//
+//        final Calendar TIME = Calendar.getInstance();
+//        TIME.set(Calendar.MINUTE, 0);
+//        TIME.set(Calendar.SECOND, 0);
+//        TIME.set(Calendar.MILLISECOND, 0);
+//
+////        final Intent updateServiceIntent = new Intent(context, UpdateService.class);
+//        updateServiceIntent = new Intent(context, UpdateService.class);
+//        if (updateServicePendingIntent == null) {
+//            updateServicePendingIntent = PendingIntent.getService(context, 0, updateServiceIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+//        }
+//        alarmManager.setRepeating(AlarmManager.RTC, TIME.getTime().getTime(), 60 * 1000, updateServicePendingIntent);
 
-//        final Intent updateServiceIntent = new Intent(context, UpdateService.class);
-        updateServiceIntent = new Intent(context, UpdateService.class);
-        if (updateServicePendingIntent == null) {
-            updateServicePendingIntent = PendingIntent.getService(context, 0, updateServiceIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-        }
-
-        alarmManager.setRepeating(AlarmManager.RTC, TIME.getTime().getTime(), 60 * 1000, updateServicePendingIntent);
+        Intent intent = new Intent(context, UpdateService.class);
+        context.startService(intent);
     }
 
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
         final String action = intent.getAction();
-        if (action.equals(ACTION_RETRY)) {
-            try {
-                updateServicePendingIntent.send();
-            } catch (PendingIntent.CanceledException e) {
-                e.printStackTrace();
+        if (action.equals(UpdateService.ACTION_RETRY)) {
+            restartServiceAlarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+            restartServiceIntent = new Intent(context, UpdateService.class);
+            restartServicePendingIntent = PendingIntent.getService(context, 0, restartServiceIntent, PendingIntent.FLAG_ONE_SHOT);
+            Toast.makeText(context, String.valueOf(intent.getBooleanExtra(UpdateService.CONNECTION_STATE, true)), Toast.LENGTH_SHORT).show();
+            if (intent.getBooleanExtra(UpdateService.CONNECTION_STATE, false)) {
+                restartServiceAlarmManager.cancel(restartServicePendingIntent);
+                restartServiceAlarmManager.set(AlarmManager.RTC, System.currentTimeMillis() + 60 * 1000, restartServicePendingIntent);
+            } else {
+                restartServiceAlarmManager.cancel(restartServicePendingIntent);
+                restartServiceAlarmManager.set(AlarmManager.RTC, System.currentTimeMillis() + 30 * 1000, restartServicePendingIntent);
             }
         }
     }
@@ -67,9 +74,13 @@ public class WeatherWidget extends AppWidgetProvider {
     public void onDisabled(Context context) {
         super.onDisabled(context);
 //        final AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        alarmManager.cancel(updateServicePendingIntent);
+//        alarmManager.cancel(updateServicePendingIntent);
 //        final Intent updateServiceIntent = new Intent(context, UpdateService.class);
-        context.stopService(updateServiceIntent);
+//        context.stopService(updateServiceIntent);
+
+        Intent intent = new Intent(context, UpdateService.class);
+        context.stopService(intent);
+        restartServiceAlarmManager.cancel(restartServicePendingIntent);
     }
 
     @Override

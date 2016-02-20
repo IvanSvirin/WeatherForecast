@@ -129,12 +129,12 @@ public class UpdateService extends Service {
     }
 
     private void updateWidget() {
-        RemoteViews view = new RemoteViews(getPackageName(), R.layout.weather_widget);
+        RemoteViews view = new RemoteViews(getPackageName(), R.layout.weather_widget_new2);
         AppWidgetManager manager = AppWidgetManager.getInstance(this);
         ComponentName thisWidget = new ComponentName(this, WeatherWidget.class);
         Picasso.with(getApplicationContext())
                 .load(imageUrl + icon)
-                .resizeDimen(R.dimen.icon_width, R.dimen.icon_height)
+                .resizeDimen(R.dimen.main_icon_width, R.dimen.main_icon_height)
                 .into(view, R.id.weatherIcon, manager.getAppWidgetIds(thisWidget));
         view.setTextViewText(R.id.name, placeName);
         view.setTextViewText(R.id.temperature, temperature);

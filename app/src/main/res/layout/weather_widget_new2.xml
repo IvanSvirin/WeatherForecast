@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/widget_margin"
+    android:columnCount="10"
+    android:rowCount="10"
+    android:background="#4DB6AC">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/weatherIcon"
+        android:layout_row="0"
+        android:layout_column="0"
+        android:layout_columnSpan="3"
+        android:layout_rowSpan="6"
+        android:src="@drawable/four" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="-22 C"
+        android:id="@+id/temperature"
+        android:layout_row="0"
+        android:layout_column="3"
+        android:layout_columnSpan="3"
+        android:layout_rowSpan="6"
+        android:textSize="32sp"
+        android:textColor="#550000" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Saint Petersburg"
+        android:id="@+id/name"
+        android:layout_row="0"
+        android:layout_column="6"
+        android:layout_columnSpan="4"
+        android:layout_rowSpan="2"
+        android:textSize="24sp"
+        android:textColor="#550000" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SW 22 m/s"
+        android:id="@+id/wind"
+        android:layout_row="2"
+        android:layout_column="6"
+        android:layout_columnSpan="4"
+        android:layout_rowSpan="2"
+        android:textSize="16sp"
+        android:textColor="#550000" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="722 mm Hg"
+        android:id="@+id/pressure"
+        android:layout_row="4"
+        android:layout_column="6"
+        android:layout_columnSpan="4"
+        android:layout_rowSpan="2"
+        android:textSize="16sp"
+        android:textColor="#550000" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sun"
+        android:id="@+id/weekDay0"
+        android:layout_row="6"
+        android:layout_column="0"
+        android:layout_columnSpan="2"
+        android:textSize="12sp"
+        android:textColor="#550000" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Mon"
+        android:id="@+id/weekDay1"
+        android:layout_row="6"
+        android:layout_column="2"
+        android:layout_columnSpan="2"
+        android:textSize="12sp"
+        android:textColor="#550000" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tue"
+        android:id="@+id/weekDay2"
+        android:layout_row="6"
+        android:layout_column="4"
+        android:layout_columnSpan="2"
+        android:textSize="12sp"
+        android:textColor="#550000" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Wen"
+        android:id="@+id/weekDay3"
+        android:layout_row="6"
+        android:layout_column="6"
+        android:layout_columnSpan="2"
+        android:textSize="12sp"
+        android:textColor="#550000" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Thu"
+        android:id="@+id/weekDay4"
+        android:layout_row="6"
+        android:layout_column="8"
+        android:layout_columnSpan="2"
+        android:textSize="12sp"
+        android:textColor="#550000" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="22 C/24 C"
+        android:id="@+id/temperature0"
+        android:layout_row="7"
+        android:layout_column="0"
+        android:textSize="12sp"
+        android:layout_columnSpan="2"
+        android:textColor="#550000" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/icon0"
+        android:layout_row="8"
+        android:layout_column="0"
+        android:layout_columnSpan="2"
+        android:layout_rowSpan="2"
+        android:src="@drawable/four" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="22 C/24 C"
+        android:id="@+id/temperature1"
+        android:layout_row="7"
+        android:layout_column="2"
+        android:textSize="12sp"
+        android:layout_columnSpan="2"
+        android:textColor="#550000" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="22 C/24 C"
+        android:id="@+id/temperature2"
+        android:layout_row="7"
+        android:layout_column="4"
+        android:textSize="12sp"
+        android:layout_columnSpan="2"
+        android:textColor="#550000" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="22 C/24 C"
+        android:id="@+id/temperature3"
+        android:layout_row="7"
+        android:layout_column="6"
+        android:textSize="12sp"
+        android:layout_columnSpan="2"
+        android:textColor="#550000" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="22 C/24 C"
+        android:id="@+id/temperature4"
+        android:layout_row="7"
+        android:layout_column="8"
+        android:textSize="12sp"
+        android:layout_columnSpan="2"
+        android:textColor="#550000" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/icon1"
+        android:layout_row="8"
+        android:layout_column="2"
+        android:src="@drawable/four"
+        android:layout_columnSpan="2"
+        android:layout_rowSpan="2" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/icon2"
+        android:layout_row="8"
+        android:layout_column="4"
+        android:src="@drawable/four"
+        android:layout_columnSpan="2"
+        android:layout_rowSpan="2" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/icon3"
+        android:layout_row="8"
+        android:layout_column="6"
+        android:src="@drawable/four"
+        android:layout_columnSpan="2"
+        android:layout_rowSpan="2" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/icon4"
+        android:layout_row="8"
+        android:layout_column="8"
+        android:src="@drawable/four"
+        android:layout_columnSpan="2"
+        android:layout_rowSpan="2" />
+</GridLayout>

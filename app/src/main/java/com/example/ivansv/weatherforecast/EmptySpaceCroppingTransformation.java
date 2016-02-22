@@ -11,7 +11,7 @@ import com.squareup.picasso.Transformation;
 public class EmptySpaceCroppingTransformation implements Transformation {
     @Override
     public Bitmap transform(Bitmap source) {
-        int y = 35;
+        int y = source.getHeight() / 5;
         int x = 0;
         Bitmap result = Bitmap.createBitmap(source, x, y, source.getWidth(), source.getHeight() * 3 / 5);
         if (result != source) {

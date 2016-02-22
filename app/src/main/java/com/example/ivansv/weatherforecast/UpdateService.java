@@ -187,7 +187,7 @@ public class UpdateService extends Service {
         for (int i = 0; i < 5; i++) {
             Picasso.with(getApplicationContext())
                     .load(imageUrl + icons[i])
-                    .resizeDimen(R.dimen.small_icon_width, R.dimen.main_icon_height)
+                    .resizeDimen(R.dimen.small_icon_width, R.dimen.small_icon_height)
                     .transform(new EmptySpaceCroppingTransformation())
                     .into(view, iconIds[i], manager.getAppWidgetIds(thisWidget));
             view.setTextViewText(weekDayIds[i], weekDays[i]);

@@ -104,7 +104,7 @@ public class WeatherWidget extends AppWidgetProvider {
         String pressure = sp.getString(ConfigureActivity.WIDGET_PRESSURE, null);
         String wind = sp.getString(ConfigureActivity.WIDGET_WIND, null);
 
-        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.weather_widget_new2);
+        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.weather_widget_new);
         views.setTextViewText(R.id.name, placeName);
         views.setTextViewText(R.id.temperature, temperature);
         views.setTextViewText(R.id.pressure, pressure);

@@ -15,7 +15,8 @@
         android:layout_column="0"
         android:layout_columnSpan="3"
         android:layout_rowSpan="6"
-        android:src="@drawable/four" />
+        android:src="@drawable/four"
+        android:layout_gravity="center" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -27,7 +28,8 @@
         android:layout_columnSpan="3"
         android:layout_rowSpan="6"
         android:textSize="32sp"
-        android:textColor="#550000" />
+        android:textColor="#550000"
+        android:layout_gravity="center" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -38,7 +40,7 @@
         android:layout_column="6"
         android:layout_columnSpan="4"
         android:layout_rowSpan="2"
-        android:textSize="24sp"
+        android:textSize="16sp"
         android:textColor="#550000" />
 
     <TextView
@@ -50,7 +52,7 @@
         android:layout_column="6"
         android:layout_columnSpan="4"
         android:layout_rowSpan="2"
-        android:textSize="16sp"
+        android:textSize="14sp"
         android:textColor="#550000" />
 
     <TextView
@@ -58,11 +60,9 @@
         android:layout_height="wrap_content"
         android:text="722 mm Hg"
         android:id="@+id/pressure"
-        android:layout_row="4"
         android:layout_column="6"
-        android:layout_columnSpan="4"
         android:layout_rowSpan="2"
-        android:textSize="16sp"
+        android:textSize="14sp"
         android:textColor="#550000" />
 
     <TextView
@@ -74,7 +74,8 @@
         android:layout_column="0"
         android:layout_columnSpan="2"
         android:textSize="12sp"
-        android:textColor="#550000" />
+        android:textColor="#550000"
+        android:layout_gravity="center_horizontal" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -85,7 +86,8 @@
         android:layout_column="2"
         android:layout_columnSpan="2"
         android:textSize="12sp"
-        android:textColor="#550000" />
+        android:textColor="#550000"
+        android:layout_gravity="center_horizontal" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -96,18 +98,20 @@
         android:layout_column="4"
         android:layout_columnSpan="2"
         android:textSize="12sp"
-        android:textColor="#550000" />
+        android:textColor="#550000"
+        android:layout_gravity="center_horizontal" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Wen"
+        android:text="Wed"
         android:id="@+id/weekDay3"
         android:layout_row="6"
         android:layout_column="6"
         android:layout_columnSpan="2"
         android:textSize="12sp"
-        android:textColor="#550000" />
+        android:textColor="#550000"
+        android:layout_gravity="center_horizontal" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -118,7 +122,8 @@
         android:layout_column="8"
         android:layout_columnSpan="2"
         android:textSize="12sp"
-        android:textColor="#550000" />
+        android:textColor="#550000"
+        android:layout_gravity="center_horizontal" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -129,7 +134,8 @@
         android:layout_column="0"
         android:textSize="12sp"
         android:layout_columnSpan="2"
-        android:textColor="#550000" />
+        android:textColor="#550000"
+        android:layout_gravity="center_horizontal" />
 
     <ImageView
         android:layout_width="wrap_content"
@@ -139,7 +145,8 @@
         android:layout_column="0"
         android:layout_columnSpan="2"
         android:layout_rowSpan="2"
-        android:src="@drawable/four" />
+        android:src="@drawable/four"
+        android:layout_gravity="center_horizontal" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -150,7 +157,8 @@
         android:layout_column="2"
         android:textSize="12sp"
         android:layout_columnSpan="2"
-        android:textColor="#550000" />
+        android:textColor="#550000"
+        android:layout_gravity="center_horizontal" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -161,7 +169,8 @@
         android:layout_column="4"
         android:textSize="12sp"
         android:layout_columnSpan="2"
-        android:textColor="#550000" />
+        android:textColor="#550000"
+        android:layout_gravity="center_horizontal" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -172,7 +181,8 @@
         android:layout_column="6"
         android:textSize="12sp"
         android:layout_columnSpan="2"
-        android:textColor="#550000" />
+        android:textColor="#550000"
+        android:layout_gravity="center_horizontal" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -183,7 +193,8 @@
         android:layout_column="8"
         android:textSize="12sp"
         android:layout_columnSpan="2"
-        android:textColor="#550000" />
+        android:textColor="#550000"
+        android:layout_gravity="center_horizontal" />
 
     <ImageView
         android:layout_width="wrap_content"
@@ -193,7 +204,8 @@
         android:layout_column="2"
         android:src="@drawable/four"
         android:layout_columnSpan="2"
-        android:layout_rowSpan="2" />
+        android:layout_rowSpan="2"
+        android:layout_gravity="center_horizontal" />
 
     <ImageView
         android:layout_width="wrap_content"
@@ -203,7 +215,8 @@
         android:layout_column="4"
         android:src="@drawable/four"
         android:layout_columnSpan="2"
-        android:layout_rowSpan="2" />
+        android:layout_rowSpan="2"
+        android:layout_gravity="center_horizontal" />
 
     <ImageView
         android:layout_width="wrap_content"
@@ -213,7 +226,8 @@
         android:layout_column="6"
         android:src="@drawable/four"
         android:layout_columnSpan="2"
-        android:layout_rowSpan="2" />
+        android:layout_rowSpan="2"
+        android:layout_gravity="center_horizontal" />
 
     <ImageView
         android:layout_width="wrap_content"
@@ -223,5 +237,6 @@
         android:layout_column="8"
         android:src="@drawable/four"
         android:layout_columnSpan="2"
-        android:layout_rowSpan="2" />
+        android:layout_rowSpan="2"
+        android:layout_gravity="center_horizontal" />
 </GridLayout>

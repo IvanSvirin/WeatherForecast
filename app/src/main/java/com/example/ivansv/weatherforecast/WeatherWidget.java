@@ -17,6 +17,7 @@ public class WeatherWidget extends AppWidgetProvider {
     private static PendingIntent restartServicePendingIntent;
     private static Intent restartServiceIntent;
     private static AlarmManager restartServiceAlarmManager;
+    // TODO: 23.02.2016  add action BOOT_COMPLETED
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {

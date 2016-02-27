@@ -17,7 +17,7 @@ public class WeatherWidget extends AppWidgetProvider {
     private static PendingIntent restartServicePendingIntent;
     private static Intent restartServiceIntent;
     private static AlarmManager restartServiceAlarmManager;
-    // TODO: 23.02.2016  add action BOOT_COMPLETED
+    private final String BOOT_ACTION = "android.intent.action.BOOT_COMPLETED";
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
@@ -51,6 +51,13 @@ public class WeatherWidget extends AppWidgetProvider {
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
         final String action = intent.getAction();
+        if (action.equals(BOOT_ACTION)) {
+            restartServiceAlarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+            restartServiceIntent = new Intent(context, UpdateService.class);
+            restartServicePendingIntent = PendingIntent.getService(context, 0, restartServiceIntent, PendingIntent.FLAG_ONE_SHOT);
+            restartServiceAlarmManager.cancel(restartServicePendingIntent);
+            restartServiceAlarmManager.set(AlarmManager.RTC, System.currentTimeMillis() + 30 * 1000, restartServicePendingIntent);
+        }
         if (action.equals(UpdateService.ACTION_RETRY)) {
             restartServiceAlarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
             restartServiceIntent = new Intent(context, UpdateService.class);

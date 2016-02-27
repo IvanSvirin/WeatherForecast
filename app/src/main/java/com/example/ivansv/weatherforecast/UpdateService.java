@@ -66,7 +66,11 @@ public class UpdateService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         location = getLocation();
+        requestWeather();
+        return START_STICKY;
+    }
 
+    private void requestWeather() {
         RestAdapter restAdapter = new RestAdapter.Builder()
                 .setEndpoint(url)
                 .build();
@@ -82,10 +86,8 @@ public class UpdateService extends Service {
                                 String.valueOf((int) (currentWeather.getWind().getSpeed() * 1)) + " m/s";
                         pressure = String.valueOf((int) (currentWeather.getMain().getPressure() * 0.75006375541921)) + " mm Hg";
                         icon = currentWeather.getWeather().get(0).getIcon() + ".png";
-                        isConnect = true;
-
                         if (placeName != null) {
-                            sendSuccessBroadcast();
+                            requestForecast();
                             updateWidgetTop();
                         } else {
                             sendErrorBroadcast();
@@ -94,12 +96,13 @@ public class UpdateService extends Service {
 
                     @Override
                     public void failure(RetrofitError error) {
-                        isConnect = false;
                         Toast.makeText(UpdateService.this, "No connection", Toast.LENGTH_SHORT).show();
                         sendErrorBroadcast();
                     }
                 });
+    }
 
+    private void requestForecast() {
         RestAdapter restAdapter2 = new RestAdapter.Builder()
                 .setEndpoint(url)
                 .build();
@@ -118,48 +121,19 @@ public class UpdateService extends Service {
                             icons[i] = forecast.getList().get(i).getWeather().get(0).getIcon() + ".png";
                         }
                         if (icons[4] != null) {
+                            sendSuccessBroadcast();
                             updateWidgetBottom();
+                        } else {
+                            sendErrorBroadcast();
                         }
                     }
 
                     @Override
                     public void failure(RetrofitError error) {
+                        Toast.makeText(UpdateService.this, "No connection", Toast.LENGTH_SHORT).show();
+                        sendErrorBroadcast();
                     }
                 });
-
-//        if (placeName != null && isConnect) {
-//            RemoteViews view = new RemoteViews(getPackageName(), R.layout.weather_widget);
-//            AppWidgetManager manager = AppWidgetManager.getInstance(this);
-//            ComponentName thisWidget = new ComponentName(this, WeatherWidget.class);
-//            Picasso.with(getApplicationContext())
-//                    .load(imageUrl + icon)
-//                    .resizeDimen(R.dimen.icon_width, R.dimen.icon_height)
-//                    .into(view, R.id.weatherIcon, manager.getAppWidgetIds(thisWidget));
-//            view.setTextViewText(R.id.name, placeName);
-//            view.setTextViewText(R.id.temperature, temperature);
-//            view.setTextViewText(R.id.pressure, pressure);
-//            view.setTextViewText(R.id.wind, wind);
-//            manager.updateAppWidget(thisWidget, view);
-
-//            alarmManager.cancel(restartPendingIntent);
-//            alarmManager.set(AlarmManager.RTC, System.currentTimeMillis() + 30 * 1000, restartPendingIntent);
-//        } else {
-//            isConnect = false;
-
-//            alarmManager.cancel(restartPendingIntent);
-//            alarmManager.set(AlarmManager.RTC, System.currentTimeMillis() + 15 * 1000, restartPendingIntent);
-//        }
-//        Intent retryIntent = new Intent(this, WeatherWidget.class);
-//        retryIntent.setAction(ACTION_RETRY);
-//        retryIntent.putExtra(CONNECTION_STATE, isConnect);
-//        try {
-//            PendingIntent.getBroadcast(this, 0, retryIntent, 0).send();
-//        } catch (PendingIntent.CanceledException e) {
-//            e.printStackTrace();
-//        }
-
-//        return super.onStartCommand(intent, flags, startId);
-        return START_STICKY;
     }
 
     private void updateWidgetBottom() {

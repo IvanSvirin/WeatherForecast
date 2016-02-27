@@ -32,6 +32,7 @@
 
         <receiver android:name=".WeatherWidget">
             <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="com.example.ivansv.weatherforecast.ACTION_RETRY"/>
             </intent-filter>

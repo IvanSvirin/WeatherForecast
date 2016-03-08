@@ -15,7 +15,6 @@ import android.os.Build;
 import android.os.IBinder;
 import android.support.v4.app.ActivityCompat;
 import android.widget.RemoteViews;
-import android.widget.Toast;
 
 import com.example.ivansv.weatherforecast.CurrentWeatherModel.CurrentWeather;
 import com.example.ivansv.weatherforecast.ForecastModel.Forecast;
@@ -24,16 +23,17 @@ import com.squareup.picasso.Picasso;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-import retrofit.Callback;
-import retrofit.RestAdapter;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class UpdateService extends Service {
     private static final String API_KEY = "138b3901759ae9758770c6acef29b4a7";
     private Location location;
     private static final int ACCESS_LOCATION_PERMISSION = 1;
-    private String url = "http://api.openweathermap.org/data/2.5";
+    private String url = "http://api.openweathermap.org/data/2.5/";
     private String imageUrl = "http://openweathermap.org/img/w/";
     private String placeName;
     private String temperature;
@@ -71,69 +71,68 @@ public class UpdateService extends Service {
     }
 
     private void requestWeather() {
-        RestAdapter restAdapter = new RestAdapter.Builder()
-                .setEndpoint(url)
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(url)
+                .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        RestInterface restInterface = restAdapter.create(RestInterface.class);
+        RestInterface restInterface = retrofit.create(RestInterface.class);
         restInterface.getWeatherReport(String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()),
-                API_KEY, new Callback<CurrentWeather>() {
-                    @Override
-                    public void success(CurrentWeather currentWeather, Response response) {
-                        Toast.makeText(UpdateService.this, placeName, Toast.LENGTH_SHORT).show();
-                        placeName = currentWeather.getName();
-                        temperature = String.valueOf((int) (currentWeather.getMain().getTemp() - 273.15)) + degree;
-                        wind = getWindDirection(currentWeather.getWind().getDeg()) + " " +
-                                String.valueOf((int) (currentWeather.getWind().getSpeed() * 1)) + " m/s";
-                        pressure = String.valueOf((int) (currentWeather.getMain().getPressure() * 0.75006375541921)) + " mm Hg";
-                        icon = currentWeather.getWeather().get(0).getIcon() + ".png";
-                        if (placeName != null) {
-                            requestForecast();
-                            updateWidgetTop();
-                        } else {
-                            sendErrorBroadcast();
-                        }
-                    }
+                API_KEY).enqueue(new Callback<CurrentWeather>() {
+            @Override
+            public void onResponse(Call<CurrentWeather> call, Response<CurrentWeather> response) {
+                placeName = response.body().getName();
+                temperature = String.valueOf((int) (response.body().getMain().getTemp() - 273.15)) + degree;
+                wind = getWindDirection(response.body().getWind().getDeg()) + " " +
+                        String.valueOf((int) (response.body().getWind().getSpeed() * 1)) + " m/s";
+                pressure = String.valueOf((int) (response.body().getMain().getPressure() * 0.75006375541921)) + " mm Hg";
+                icon = response.body().getWeather().get(0).getIcon() + ".png";
+                if (placeName != null) {
+                    requestForecast();
+                    updateWidgetTop();
+                } else {
+                    sendErrorBroadcast();
+                }
+            }
 
-                    @Override
-                    public void failure(RetrofitError error) {
-                        Toast.makeText(UpdateService.this, "No connection", Toast.LENGTH_SHORT).show();
-                        sendErrorBroadcast();
-                    }
-                });
+            @Override
+            public void onFailure(Call<CurrentWeather> call, Throwable t) {
+                sendErrorBroadcast();
+            }
+        });
     }
 
     private void requestForecast() {
-        RestAdapter restAdapter2 = new RestAdapter.Builder()
-                .setEndpoint(url)
+        Retrofit retrofit2 = new Retrofit.Builder()
+                .baseUrl(url)
+                .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        RestInterface restInterface2 = restAdapter2.create(RestInterface.class);
+        RestInterface restInterface2 = retrofit2.create(RestInterface.class);
         String cnt = "5";
-        restInterface2.getForecast(String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()), cnt,
-                API_KEY, new Callback<Forecast>() {
-                    @Override
-                    public void success(Forecast forecast, Response response) {
-                        for (int i = 0; i < 5; i++) {
-                            calendar.setTimeInMillis((long) (forecast.getList().get(i).getDt()) * 1000);
-                            weekDays[i] = getWeekDayName(calendar.get(Calendar.DAY_OF_WEEK));
-                            temperatures[i] = String.valueOf((int) (forecast.getList().get(i).getTemp().getMin() - 273.15)) + degree +
-                                    "/" + String.valueOf((int) (forecast.getList().get(i).getTemp().getMax() - 273.15)) +
-                                    degree;
-                            icons[i] = forecast.getList().get(i).getWeather().get(0).getIcon() + ".png";
-                        }
-                        if (icons[4] != null) {
-                            sendSuccessBroadcast();
-                            updateWidgetBottom();
-                        } else {
-                            sendErrorBroadcast();
-                        }
-                    }
+        restInterface2.getForecast(String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()),
+                cnt, API_KEY).enqueue(new Callback<Forecast>() {
+            @Override
+            public void onResponse(Call<Forecast> call, Response<Forecast> response) {
+                for (int i = 0; i < 5; i++) {
+                    calendar.setTimeInMillis((long) (response.body().getList().get(i).getDt()) * 1000);
+                    weekDays[i] = getWeekDayName(calendar.get(Calendar.DAY_OF_WEEK));
+                    temperatures[i] = String.valueOf((int) (response.body().getList().get(i).getTemp().getMin() - 273.15)) + degree +
+                            "/" + String.valueOf((int) (response.body().getList().get(i).getTemp().getMax() - 273.15)) +
+                            degree;
+                    icons[i] = response.body().getList().get(i).getWeather().get(0).getIcon() + ".png";
+                }
+                if (icons[4] != null) {
+                    sendSuccessBroadcast();
+                    updateWidgetBottom();
+                } else {
+                    sendErrorBroadcast();
+                }
+            }
 
-                    @Override
-                    public void failure(RetrofitError error) {
-                        Toast.makeText(UpdateService.this, "No connection", Toast.LENGTH_SHORT).show();
-                        sendErrorBroadcast();
-                    }
-                });
+            @Override
+            public void onFailure(Call<Forecast> call, Throwable t) {
+                sendErrorBroadcast();
+            }
+        });
     }
 
     private void updateWidgetBottom() {

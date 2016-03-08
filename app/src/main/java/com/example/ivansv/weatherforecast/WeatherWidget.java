@@ -8,11 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.widget.RemoteViews;
-import android.widget.Toast;
 
-/**
- * Created by ivansv on 12.02.2016.
- */
 public class WeatherWidget extends AppWidgetProvider {
     private static PendingIntent restartServicePendingIntent;
     private static Intent restartServiceIntent;
@@ -56,19 +52,19 @@ public class WeatherWidget extends AppWidgetProvider {
             restartServiceIntent = new Intent(context, UpdateService.class);
             restartServicePendingIntent = PendingIntent.getService(context, 0, restartServiceIntent, PendingIntent.FLAG_ONE_SHOT);
             restartServiceAlarmManager.cancel(restartServicePendingIntent);
-            restartServiceAlarmManager.set(AlarmManager.RTC, System.currentTimeMillis() + 30 * 1000, restartServicePendingIntent);
+            restartServiceAlarmManager.set(AlarmManager.RTC, System.currentTimeMillis() + 60 * 1000, restartServicePendingIntent);
         }
         if (action.equals(UpdateService.ACTION_RETRY)) {
             restartServiceAlarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
             restartServiceIntent = new Intent(context, UpdateService.class);
             restartServicePendingIntent = PendingIntent.getService(context, 0, restartServiceIntent, PendingIntent.FLAG_ONE_SHOT);
-            Toast.makeText(context, String.valueOf(intent.getBooleanExtra(UpdateService.CONNECTION_STATE, true)), Toast.LENGTH_SHORT).show();
+//            Toast.makeText(context, String.valueOf(intent.getBooleanExtra(UpdateService.CONNECTION_STATE, true)), Toast.LENGTH_SHORT).show();
             if (intent.getBooleanExtra(UpdateService.CONNECTION_STATE, false)) {
                 restartServiceAlarmManager.cancel(restartServicePendingIntent);
-                restartServiceAlarmManager.set(AlarmManager.RTC, System.currentTimeMillis() + 60 * 1000, restartServicePendingIntent);
+                restartServiceAlarmManager.set(AlarmManager.RTC, System.currentTimeMillis() + 900 * 1000, restartServicePendingIntent);
             } else {
                 restartServiceAlarmManager.cancel(restartServicePendingIntent);
-                restartServiceAlarmManager.set(AlarmManager.RTC, System.currentTimeMillis() + 30 * 1000, restartServicePendingIntent);
+                restartServiceAlarmManager.set(AlarmManager.RTC, System.currentTimeMillis() + 60 * 1000, restartServicePendingIntent);
             }
         }
     }

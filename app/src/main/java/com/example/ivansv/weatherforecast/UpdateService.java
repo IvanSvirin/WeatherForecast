@@ -1,8 +1,6 @@
 package com.example.ivansv.weatherforecast;
 
 import android.Manifest;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
@@ -41,10 +39,6 @@ public class UpdateService extends Service {
     private String wind;
     private String icon;
     private char degree = 0x00B0;
-    private static Intent restartIntent;
-    private static PendingIntent restartPendingIntent = null;
-    private static AlarmManager alarmManager;
-    private boolean isConnect = false;
     public static final String CONNECTION_STATE = "CONNECTION_STATE";
     public static final String ACTION_RETRY = "ACTION_RETRY";
     private String[] weekDays = new String[5];
@@ -58,9 +52,6 @@ public class UpdateService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-//        alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
-//        restartIntent = new Intent(this, UpdateService.class);
-//        restartPendingIntent = PendingIntent.getService(this, 0, restartIntent, PendingIntent.FLAG_CANCEL_CURRENT);
     }
 
     @Override
@@ -201,7 +192,6 @@ public class UpdateService extends Service {
 
     @Override
     public void onDestroy() {
-//        alarmManager.cancel(restartPendingIntent);
         super.onDestroy();
     }
 

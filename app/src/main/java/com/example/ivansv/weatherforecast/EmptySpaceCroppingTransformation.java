@@ -1,9 +1,5 @@
 package com.example.ivansv.weatherforecast;
 
-/**
- * Created by ivansv on 22.02.2016.
- */
-
 import android.graphics.Bitmap;
 
 import com.squareup.picasso.Transformation;

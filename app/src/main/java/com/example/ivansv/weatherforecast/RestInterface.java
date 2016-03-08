@@ -7,10 +7,6 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 
-/**
- * Created by ivansv on 10.02.2016.
- */
-
 public interface RestInterface {
     @GET("weather")
     Call<CurrentWeather> getWeatherReport(@Query("lat") String lat,

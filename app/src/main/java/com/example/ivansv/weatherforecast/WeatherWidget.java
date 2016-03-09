@@ -14,7 +14,6 @@ public class WeatherWidget extends AppWidgetProvider {
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        super.onUpdate(context, appWidgetManager, appWidgetIds);
         Intent intent = new Intent(context, UpdateService.class);
         context.startService(intent);
     }
@@ -37,10 +36,14 @@ public class WeatherWidget extends AppWidgetProvider {
             restartServicePendingIntent = PendingIntent.getService(context, 0, restartServiceIntent, PendingIntent.FLAG_CANCEL_CURRENT);
             if (intent.getBooleanExtra(UpdateService.CONNECTION_STATE, false)) {
                 restartServiceAlarmManager.cancel(restartServicePendingIntent);
-                restartServiceAlarmManager.set(AlarmManager.RTC, System.currentTimeMillis() + 900 * 1000, restartServicePendingIntent);
+//                restartServiceAlarmManager.set(AlarmManager.RTC, System.currentTimeMillis() + 900 * 1000, restartServicePendingIntent);
+                restartServiceAlarmManager.setRepeating(AlarmManager.RTC, System.currentTimeMillis(), 900 * 1000,
+                        restartServicePendingIntent);
             } else {
                 restartServiceAlarmManager.cancel(restartServicePendingIntent);
-                restartServiceAlarmManager.set(AlarmManager.RTC, System.currentTimeMillis() + 60 * 1000, restartServicePendingIntent);
+//                restartServiceAlarmManager.set(AlarmManager.RTC, System.currentTimeMillis() + 60 * 1000, restartServicePendingIntent);
+                restartServiceAlarmManager.setRepeating(AlarmManager.RTC, System.currentTimeMillis(), 60 * 1000,
+                        restartServicePendingIntent);
             }
         }
     }
@@ -52,7 +55,6 @@ public class WeatherWidget extends AppWidgetProvider {
 
     @Override
     public void onDisabled(Context context) {
-        super.onDisabled(context);
         Intent intent = new Intent(context, UpdateService.class);
         context.stopService(intent);
         restartServiceAlarmManager.cancel(restartServicePendingIntent);

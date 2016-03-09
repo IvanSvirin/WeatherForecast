@@ -56,8 +56,6 @@ public class UpdateService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        location.setLatitude(54.75);
-        location.setLatitude(83.11);
         location = getLocation();
         requestWeather();
         return START_STICKY;

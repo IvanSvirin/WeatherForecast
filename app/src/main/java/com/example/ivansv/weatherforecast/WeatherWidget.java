@@ -34,7 +34,7 @@ public class WeatherWidget extends AppWidgetProvider {
         if (action.equals(UpdateService.ACTION_RETRY)) {
             restartServiceAlarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
             restartServiceIntent = new Intent(context, UpdateService.class);
-            restartServicePendingIntent = PendingIntent.getService(context, 0, restartServiceIntent, PendingIntent.FLAG_ONE_SHOT);
+            restartServicePendingIntent = PendingIntent.getService(context, 0, restartServiceIntent, PendingIntent.FLAG_CANCEL_CURRENT);
             if (intent.getBooleanExtra(UpdateService.CONNECTION_STATE, false)) {
                 restartServiceAlarmManager.cancel(restartServicePendingIntent);
                 restartServiceAlarmManager.set(AlarmManager.RTC, System.currentTimeMillis() + 900 * 1000, restartServicePendingIntent);

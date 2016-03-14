@@ -6,6 +6,7 @@ import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
@@ -18,6 +19,11 @@ import com.example.ivansv.weatherforecast.CurrentWeatherModel.CurrentWeather;
 import com.example.ivansv.weatherforecast.ForecastModel.Forecast;
 import com.squareup.picasso.Picasso;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -29,6 +35,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class UpdateService extends Service {
     private static final String API_KEY = "138b3901759ae9758770c6acef29b4a7";
+    private static final String DEFAULT_LOCATION = "default_location";
+    private static final String DEFAULT_LOCATION_KEY = "default_location_key";
     private Location location;
     private static final int ACCESS_LOCATION_PERMISSION = 1;
     private String url = "http://api.openweathermap.org/data/2.5/";
@@ -44,7 +52,7 @@ public class UpdateService extends Service {
     private String[] weekDays = new String[5];
     private String[] temperatures = new String[5];
     private String[] icons = new String[5];
-    GregorianCalendar calendar = new GregorianCalendar();
+    private GregorianCalendar calendar = new GregorianCalendar();
 
     public UpdateService() {
     }
@@ -56,7 +64,17 @@ public class UpdateService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        SharedPreferences sp = getSharedPreferences(DEFAULT_LOCATION, MODE_PRIVATE);
         location = getLocation();
+        if (!sp.contains(DEFAULT_LOCATION_KEY)) {
+            SharedPreferences.Editor editor = sp.edit();
+            editor.putBoolean(DEFAULT_LOCATION_KEY, true);
+            editor.apply();
+            writeFile(location);
+        }
+        if (location == null) {
+            location = readFile();
+        }
         requestWeather();
         return START_STICKY;
     }
@@ -268,6 +286,30 @@ public class UpdateService extends Service {
                 break;
         }
         return name;
+    }
+
+    private Location readFile() {
+        try {
+            FileInputStream fileInputStream = openFileInput("location.txt");
+            ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+            Location location = (Location) objectInputStream.readObject();
+            objectInputStream.close();
+            return location;
+        } catch (ClassNotFoundException | IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private void writeFile(Location location) {
+        try {
+            FileOutputStream fileOutputStream = openFileOutput("location.txt", MODE_PRIVATE);
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+            objectOutputStream.writeObject(location);
+            objectOutputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 

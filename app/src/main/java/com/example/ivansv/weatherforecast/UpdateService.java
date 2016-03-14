@@ -66,7 +66,7 @@ public class UpdateService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         SharedPreferences sp = getSharedPreferences(DEFAULT_LOCATION, MODE_PRIVATE);
         location = getLocation();
-        if (!sp.contains(DEFAULT_LOCATION_KEY)) {
+        if (!sp.contains(DEFAULT_LOCATION_KEY) && location != null) {
             SharedPreferences.Editor editor = sp.edit();
             editor.putBoolean(DEFAULT_LOCATION_KEY, true);
             editor.apply();

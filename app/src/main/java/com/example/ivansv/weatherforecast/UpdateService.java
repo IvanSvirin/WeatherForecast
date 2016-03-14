@@ -72,10 +72,14 @@ public class UpdateService extends Service {
             editor.apply();
             writeFile(location);
         }
-        if (location == null) {
+        if (location == null && readFile() != null) {
             location = readFile();
         }
-        requestWeather();
+        if (location == null) {
+            sendErrorBroadcast();
+        } else {
+            requestWeather();
+        }
         return START_STICKY;
     }
 

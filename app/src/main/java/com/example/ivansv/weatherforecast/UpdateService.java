@@ -66,19 +66,18 @@ public class UpdateService extends IntentService {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Toast.makeText(getApplicationContext(), "Start Service", Toast.LENGTH_SHORT).show();
-        return super.onStartCommand(intent, flags, startId);
-    }
-
-    @Override
-    protected void onHandleIntent(Intent intent) {
         Intent restartServiceIntent;
         restartServiceAlarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
         restartServiceIntent = new Intent(getApplicationContext(), UpdateService.class);
         restartServicePendingIntent = PendingIntent.getService(getApplicationContext(), 0, restartServiceIntent, PendingIntent.FLAG_ONE_SHOT);
         restartServiceAlarmManager.cancel(restartServicePendingIntent);
         restartServiceAlarmManager.set(AlarmManager.RTC, System.currentTimeMillis() + 60 * 1000, restartServicePendingIntent);
+        Toast.makeText(getApplicationContext(), "Start Service", Toast.LENGTH_SHORT).show();
+        return super.onStartCommand(intent, flags, startId);
+    }
 
+    @Override
+    protected void onHandleIntent(Intent intent) {
         SharedPreferences sp = getSharedPreferences(DEFAULT_LOCATION, MODE_PRIVATE);
         location = getLocation();
         if (!sp.contains(DEFAULT_LOCATION_KEY) && location != null) {

@@ -71,7 +71,7 @@ public class UpdateService extends IntentService {
         restartServiceIntent = new Intent(getApplicationContext(), UpdateService.class);
         restartServicePendingIntent = PendingIntent.getService(getApplicationContext(), 0, restartServiceIntent, PendingIntent.FLAG_ONE_SHOT);
         restartServiceAlarmManager.cancel(restartServicePendingIntent);
-        restartServiceAlarmManager.set(AlarmManager.RTC, System.currentTimeMillis() + 60 * 1000, restartServicePendingIntent);
+        restartServiceAlarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 60 * 1000, restartServicePendingIntent);
         Toast.makeText(getApplicationContext(), "Start Service", Toast.LENGTH_SHORT).show();
         return super.onStartCommand(intent, flags, startId);
     }

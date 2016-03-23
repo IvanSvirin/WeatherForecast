@@ -72,7 +72,7 @@ public class WeatherWidget extends AppWidgetProvider {
 //        Intent intent = new Intent(context, UpdateService.class);
 //        context.stopService(intent);
 
-        UpdateService.restartServiceAlarmManager.cancel(restartServicePendingIntent);
+        UpdateService.restartServiceAlarmManager.cancel(UpdateService.restartServicePendingIntent);
 //        repeatServiceAlarmManager.cancel(repeatServicePendingIntent);
     }
 

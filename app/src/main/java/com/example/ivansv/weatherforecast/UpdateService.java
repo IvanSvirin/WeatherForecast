@@ -1,7 +1,9 @@
 package com.example.ivansv.weatherforecast;
 
 import android.Manifest;
-import android.app.Service;
+import android.app.AlarmManager;
+import android.app.IntentService;
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
@@ -14,6 +16,7 @@ import android.os.Build;
 import android.os.IBinder;
 import android.support.v4.app.ActivityCompat;
 import android.widget.RemoteViews;
+import android.widget.Toast;
 
 import com.example.ivansv.weatherforecast.CurrentWeatherModel.CurrentWeather;
 import com.example.ivansv.weatherforecast.ForecastModel.Forecast;
@@ -33,7 +36,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class UpdateService extends Service {
+public class UpdateService extends IntentService {
     private static final String API_KEY = "138b3901759ae9758770c6acef29b4a7";
     private static final String DEFAULT_LOCATION = "default_location";
     private static final String DEFAULT_LOCATION_KEY = "default_location_key";
@@ -53,17 +56,29 @@ public class UpdateService extends Service {
     private String[] temperatures = new String[5];
     private String[] icons = new String[5];
     private GregorianCalendar calendar = new GregorianCalendar();
+    private RestInterface restInterface;
+    public static PendingIntent restartServicePendingIntent;
+    public static AlarmManager restartServiceAlarmManager;
 
     public UpdateService() {
-    }
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
+        super("UpdateService");
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        Toast.makeText(getApplicationContext(), "Start Service", Toast.LENGTH_SHORT).show();
+        return super.onStartCommand(intent, flags, startId);
+    }
+
+    @Override
+    protected void onHandleIntent(Intent intent) {
+        Intent restartServiceIntent;
+        restartServiceAlarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+        restartServiceIntent = new Intent(getApplicationContext(), UpdateService.class);
+        restartServicePendingIntent = PendingIntent.getService(getApplicationContext(), 0, restartServiceIntent, PendingIntent.FLAG_ONE_SHOT);
+        restartServiceAlarmManager.cancel(restartServicePendingIntent);
+        restartServiceAlarmManager.set(AlarmManager.RTC, System.currentTimeMillis() + 60 * 1000, restartServicePendingIntent);
+
         SharedPreferences sp = getSharedPreferences(DEFAULT_LOCATION, MODE_PRIVATE);
         location = getLocation();
         if (!sp.contains(DEFAULT_LOCATION_KEY) && location != null) {
@@ -76,19 +91,40 @@ public class UpdateService extends Service {
             location = readFile();
         }
         if (location == null) {
-            sendErrorBroadcast();
+//            sendErrorBroadcast();
         } else {
             requestWeather();
         }
-        return START_STICKY;
     }
+
+//    @Override
+//    public int onStartCommand(Intent intent, int flags, int startId) {
+//        SharedPreferences sp = getSharedPreferences(DEFAULT_LOCATION, MODE_PRIVATE);
+//        location = getLocation();
+//        if (!sp.contains(DEFAULT_LOCATION_KEY) && location != null) {
+//            SharedPreferences.Editor editor = sp.edit();
+//            editor.putBoolean(DEFAULT_LOCATION_KEY, true);
+//            editor.apply();
+//            writeFile(location);
+//        }
+//        if (location == null && readFile() != null) {
+//            location = readFile();
+//        }
+//        if (location == null) {
+//            sendErrorBroadcast();
+//        } else {
+//            requestWeather();
+//        }
+////        return START_STICKY;
+//        return START_REDELIVER_INTENT;
+//    }
 
     private void requestWeather() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(url)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        RestInterface restInterface = retrofit.create(RestInterface.class);
+        restInterface = retrofit.create(RestInterface.class);
         restInterface.getWeatherReport(String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()),
                 API_KEY).enqueue(new Callback<CurrentWeather>() {
             @Override
@@ -103,25 +139,25 @@ public class UpdateService extends Service {
                     requestForecast();
                     updateWidgetTop();
                 } else {
-                    sendErrorBroadcast();
+//                    sendErrorBroadcast();
                 }
             }
 
             @Override
             public void onFailure(Call<CurrentWeather> call, Throwable t) {
-                sendErrorBroadcast();
+//                sendErrorBroadcast();
             }
         });
     }
 
     private void requestForecast() {
-        Retrofit retrofit2 = new Retrofit.Builder()
-                .baseUrl(url)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        RestInterface restInterface2 = retrofit2.create(RestInterface.class);
+//        Retrofit retrofit2 = new Retrofit.Builder()
+//                .baseUrl(url)
+//                .addConverterFactory(GsonConverterFactory.create())
+//                .build();
+//        RestInterface restInterface2 = retrofit2.create(RestInterface.class);
         String cnt = "5";
-        restInterface2.getForecast(String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()),
+        restInterface.getForecast(String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()),
                 cnt, API_KEY).enqueue(new Callback<Forecast>() {
             @Override
             public void onResponse(Call<Forecast> call, Response<Forecast> response) {
@@ -134,16 +170,17 @@ public class UpdateService extends Service {
                     icons[i] = response.body().getList().get(i).getWeather().get(0).getIcon() + ".png";
                 }
                 if (icons[4] != null) {
-                    sendSuccessBroadcast();
+//                    sendSuccessBroadcast();
                     updateWidgetBottom();
+//                    stopSelf();
                 } else {
-                    sendErrorBroadcast();
+//                    sendErrorBroadcast();
                 }
             }
 
             @Override
             public void onFailure(Call<Forecast> call, Throwable t) {
-                sendErrorBroadcast();
+//                sendErrorBroadcast();
             }
         });
     }
@@ -298,6 +335,7 @@ public class UpdateService extends Service {
             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
             Location location = (Location) objectInputStream.readObject();
             objectInputStream.close();
+            fileInputStream.close();
             return location;
         } catch (ClassNotFoundException | IOException e) {
             e.printStackTrace();
@@ -311,6 +349,7 @@ public class UpdateService extends Service {
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
             objectOutputStream.writeObject(location);
             objectOutputStream.close();
+            fileOutputStream.close();
         } catch (IOException e) {
             e.printStackTrace();
         }

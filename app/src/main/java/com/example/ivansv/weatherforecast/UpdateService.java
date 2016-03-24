@@ -2,8 +2,8 @@ package com.example.ivansv.weatherforecast;
 
 import android.Manifest;
 import android.app.AlarmManager;
-import android.app.IntentService;
 import android.app.PendingIntent;
+import android.app.Service;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
@@ -16,7 +16,6 @@ import android.os.Build;
 import android.os.IBinder;
 import android.support.v4.app.ActivityCompat;
 import android.widget.RemoteViews;
-import android.widget.Toast;
 
 import com.example.ivansv.weatherforecast.CurrentWeatherModel.CurrentWeather;
 import com.example.ivansv.weatherforecast.ForecastModel.Forecast;
@@ -36,7 +35,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class UpdateService extends IntentService {
+public class UpdateService extends Service {
     private static final String API_KEY = "138b3901759ae9758770c6acef29b4a7";
     private static final String DEFAULT_LOCATION = "default_location";
     private static final String DEFAULT_LOCATION_KEY = "default_location_key";
@@ -61,23 +60,12 @@ public class UpdateService extends IntentService {
     public static AlarmManager restartServiceAlarmManager;
 
     public UpdateService() {
-        super("UpdateService");
+        super();
     }
+
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Intent restartServiceIntent;
-        restartServiceAlarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
-        restartServiceIntent = new Intent(getApplicationContext(), UpdateService.class);
-        restartServicePendingIntent = PendingIntent.getService(getApplicationContext(), 0, restartServiceIntent, PendingIntent.FLAG_ONE_SHOT);
-        restartServiceAlarmManager.cancel(restartServicePendingIntent);
-        restartServiceAlarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 60 * 1000, restartServicePendingIntent);
-        Toast.makeText(getApplicationContext(), "Start Service", Toast.LENGTH_SHORT).show();
-        return super.onStartCommand(intent, flags, startId);
-    }
-
-    @Override
-    protected void onHandleIntent(Intent intent) {
         SharedPreferences sp = getSharedPreferences(DEFAULT_LOCATION, MODE_PRIVATE);
         location = getLocation();
         if (!sp.contains(DEFAULT_LOCATION_KEY) && location != null) {
@@ -90,33 +78,13 @@ public class UpdateService extends IntentService {
             location = readFile();
         }
         if (location == null) {
-//            sendErrorBroadcast();
+            sendErrorBroadcast();
         } else {
             requestWeather();
         }
+//        return START_STICKY;
+        return START_REDELIVER_INTENT;
     }
-
-//    @Override
-//    public int onStartCommand(Intent intent, int flags, int startId) {
-//        SharedPreferences sp = getSharedPreferences(DEFAULT_LOCATION, MODE_PRIVATE);
-//        location = getLocation();
-//        if (!sp.contains(DEFAULT_LOCATION_KEY) && location != null) {
-//            SharedPreferences.Editor editor = sp.edit();
-//            editor.putBoolean(DEFAULT_LOCATION_KEY, true);
-//            editor.apply();
-//            writeFile(location);
-//        }
-//        if (location == null && readFile() != null) {
-//            location = readFile();
-//        }
-//        if (location == null) {
-//            sendErrorBroadcast();
-//        } else {
-//            requestWeather();
-//        }
-////        return START_STICKY;
-//        return START_REDELIVER_INTENT;
-//    }
 
     private void requestWeather() {
         Retrofit retrofit = new Retrofit.Builder()
@@ -138,13 +106,13 @@ public class UpdateService extends IntentService {
                     requestForecast();
                     updateWidgetTop();
                 } else {
-//                    sendErrorBroadcast();
+                    sendErrorBroadcast();
                 }
             }
 
             @Override
             public void onFailure(Call<CurrentWeather> call, Throwable t) {
-//                sendErrorBroadcast();
+                sendErrorBroadcast();
             }
         });
     }
@@ -169,17 +137,17 @@ public class UpdateService extends IntentService {
                     icons[i] = response.body().getList().get(i).getWeather().get(0).getIcon() + ".png";
                 }
                 if (icons[4] != null) {
-//                    sendSuccessBroadcast();
+                    sendSuccessBroadcast();
                     updateWidgetBottom();
 //                    stopSelf();
                 } else {
-//                    sendErrorBroadcast();
+                    sendErrorBroadcast();
                 }
             }
 
             @Override
             public void onFailure(Call<Forecast> call, Throwable t) {
-//                sendErrorBroadcast();
+                sendErrorBroadcast();
             }
         });
     }
@@ -250,6 +218,7 @@ public class UpdateService extends IntentService {
 
     @Override
     public void onDestroy() {
+        sendErrorBroadcast();
         super.onDestroy();
     }
 

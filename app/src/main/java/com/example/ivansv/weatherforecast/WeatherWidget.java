@@ -19,12 +19,12 @@ public class WeatherWidget extends AppWidgetProvider {
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         super.onUpdate(context, appWidgetManager, appWidgetIds);
 
-//        Intent repeatServiceIntent;
-//        repeatServiceAlarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-//        repeatServiceIntent = new Intent(context, UpdateService.class);
-//        repeatServicePendingIntent = PendingIntent.getService(context, 0, repeatServiceIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-//        repeatServiceAlarmManager.cancel(repeatServicePendingIntent);
-//        repeatServiceAlarmManager.setRepeating(AlarmManager.RTC, System.currentTimeMillis(), 900 * 1000, repeatServicePendingIntent);
+        Intent repeatServiceIntent;
+        repeatServiceAlarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        repeatServiceIntent = new Intent(context, UpdateService.class);
+        repeatServicePendingIntent = PendingIntent.getService(context, 0, repeatServiceIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+        repeatServiceAlarmManager.cancel(repeatServicePendingIntent);
+        repeatServiceAlarmManager.setRepeating(AlarmManager.RTC, System.currentTimeMillis(), 300 * 1000, repeatServicePendingIntent);
 
         Intent intent = new Intent(context, UpdateService.class);
         context.startService(intent);
@@ -73,7 +73,7 @@ public class WeatherWidget extends AppWidgetProvider {
         context.stopService(intent);
 
         restartServiceAlarmManager.cancel(restartServicePendingIntent);
-//        repeatServiceAlarmManager.cancel(repeatServicePendingIntent);
+        repeatServiceAlarmManager.cancel(repeatServicePendingIntent);
     }
 
     @Override

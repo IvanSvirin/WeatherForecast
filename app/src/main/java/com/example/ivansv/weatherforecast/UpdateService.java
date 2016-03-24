@@ -1,8 +1,6 @@
 package com.example.ivansv.weatherforecast;
 
 import android.Manifest;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
@@ -56,8 +54,6 @@ public class UpdateService extends Service {
     private String[] icons = new String[5];
     private GregorianCalendar calendar = new GregorianCalendar();
     private RestInterface restInterface;
-    public static PendingIntent restartServicePendingIntent;
-    public static AlarmManager restartServiceAlarmManager;
 
     public UpdateService() {
         super();

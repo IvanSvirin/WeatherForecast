@@ -24,7 +24,8 @@ public class WeatherWidget extends AppWidgetProvider {
         repeatServiceIntent = new Intent(context, UpdateService.class);
         repeatServicePendingIntent = PendingIntent.getService(context, 0, repeatServiceIntent, PendingIntent.FLAG_CANCEL_CURRENT);
         repeatServiceAlarmManager.cancel(repeatServicePendingIntent);
-        repeatServiceAlarmManager.setRepeating(AlarmManager.RTC, System.currentTimeMillis(), 300 * 1000, repeatServicePendingIntent);
+        repeatServiceAlarmManager.setRepeating(AlarmManager.RTC, System.currentTimeMillis() + 300 * 1000,
+                300 * 1000, repeatServicePendingIntent);
 
         Intent intent = new Intent(context, UpdateService.class);
         context.startService(intent);

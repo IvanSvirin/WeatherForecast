@@ -14,7 +14,6 @@ public class WeatherWidget extends AppWidgetProvider {
     private PendingIntent restartServicePendingIntent;
     private AlarmManager restartServiceAlarmManager;
 
-
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         super.onUpdate(context, appWidgetManager, appWidgetIds);
@@ -24,7 +23,7 @@ public class WeatherWidget extends AppWidgetProvider {
         repeatServiceIntent = new Intent(context, UpdateService.class);
         repeatServicePendingIntent = PendingIntent.getService(context, 0, repeatServiceIntent, PendingIntent.FLAG_CANCEL_CURRENT);
         repeatServiceAlarmManager.cancel(repeatServicePendingIntent);
-        repeatServiceAlarmManager.setRepeating(AlarmManager.RTC, System.currentTimeMillis() + 300 * 1000,
+        repeatServiceAlarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 300 * 1000,
                 300 * 1000, repeatServicePendingIntent);
 
         Intent intent = new Intent(context, UpdateService.class);
@@ -41,7 +40,7 @@ public class WeatherWidget extends AppWidgetProvider {
             restartServiceIntent = new Intent(context, UpdateService.class);
             restartServicePendingIntent = PendingIntent.getService(context, 0, restartServiceIntent, PendingIntent.FLAG_ONE_SHOT);
             restartServiceAlarmManager.cancel(restartServicePendingIntent);
-            restartServiceAlarmManager.set(AlarmManager.RTC, System.currentTimeMillis() + 60 * 1000, restartServicePendingIntent);
+            restartServiceAlarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 60 * 1000, restartServicePendingIntent);
         }
         if (action.equals(UpdateService.ACTION_RETRY)) {
             restartServiceAlarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
@@ -49,13 +48,13 @@ public class WeatherWidget extends AppWidgetProvider {
             restartServicePendingIntent = PendingIntent.getService(context, 0, restartServiceIntent, PendingIntent.FLAG_ONE_SHOT);
             if (intent.getBooleanExtra(UpdateService.CONNECTION_STATE, false)) {
                 restartServiceAlarmManager.cancel(restartServicePendingIntent);
-                restartServiceAlarmManager.set(AlarmManager.RTC, System.currentTimeMillis() + 900 * 1000, restartServicePendingIntent);
+                restartServiceAlarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 900 * 1000, restartServicePendingIntent);
 
 //                restartServiceAlarmManager.setRepeating(AlarmManager.RTC, System.currentTimeMillis(), 900 * 1000,
 //                        restartServicePendingIntent);
             } else {
                 restartServiceAlarmManager.cancel(restartServicePendingIntent);
-                restartServiceAlarmManager.set(AlarmManager.RTC, System.currentTimeMillis() + 60 * 1000, restartServicePendingIntent);
+                restartServiceAlarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 60 * 1000, restartServicePendingIntent);
 
 //                restartServiceAlarmManager.setRepeating(AlarmManager.RTC, System.currentTimeMillis(), 60 * 1000,
 //                        restartServicePendingIntent);

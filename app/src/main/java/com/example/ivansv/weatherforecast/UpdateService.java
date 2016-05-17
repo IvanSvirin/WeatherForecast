@@ -17,6 +17,8 @@ import android.widget.RemoteViews;
 
 import com.example.ivansv.weatherforecast.CurrentWeatherModel.CurrentWeather;
 import com.example.ivansv.weatherforecast.ForecastModel.Forecast;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.squareup.picasso.Picasso;
 
 import java.io.FileInputStream;
@@ -83,6 +85,7 @@ public class UpdateService extends Service {
     }
 
     private void requestWeather() {
+        Gson gson = new GsonBuilder().setLenient().create();
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(url)
                 .addConverterFactory(GsonConverterFactory.create())
